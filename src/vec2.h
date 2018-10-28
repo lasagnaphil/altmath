@@ -42,35 +42,35 @@ inline vec2<T> operator/(vec2<T> a, U k) {
 }
 
 template <typename T>
-inline vec2<T>& operator+=(const vec2<T>& a, vec2<T> b) {
+inline vec2<T>& operator+=(vec2<T>& a, vec2<T> b) {
     a.x += b.x;
     a.y += b.y;
     return a;
 }
 
 template <typename T>
-inline vec2<T>& operator-=(const vec2<T>& a, vec2<T> b) {
+inline vec2<T>& operator-=(vec2<T>& a, vec2<T> b) {
     a.x -= b.x;
     a.y -= b.y;
     return a;
 }
 
 template <typename T>
-inline vec2<T>& operator*=(const vec2<T>& a, vec2<T> b) {
+inline vec2<T>& operator*=(vec2<T>& a, vec2<T> b) {
     a.x *= b.x;
     a.y *= b.y;
     return a;
 }
 
 template <typename T>
-inline vec2<T>& operator*=(const vec2<T>& a, T k) {
+inline vec2<T>& operator*=(vec2<T>& a, T k) {
     a.x *= k;
     a.y *= k;
     return a;
 }
 
 template <typename T>
-inline vec2<T>& operator/=(const vec2<T>& a, T k) {
+inline vec2<T>& operator/=(vec2<T>& a, T k) {
     a.x /= k;
     a.y /= k;
     return a;

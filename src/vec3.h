@@ -35,14 +35,13 @@ inline vec3<T> operator*(U k, vec3<T> a) {
     return {k * a.x, k * a.y, k * a.z};
 }
 
-
 template <typename T, typename U>
 inline vec3<T> operator/(vec3<T> a, U k) {
     return {a.x / k, a.y / k, a.z / k};
 }
 
 template <typename T>
-inline vec3<T>& operator+=(const vec3<T>& a, vec3<T> b) {
+inline vec3<T>& operator+=(vec3<T>& a, vec3<T> b) {
     a.x += b.x;
     a.y += b.y;
     a.z += b.z;
@@ -50,7 +49,7 @@ inline vec3<T>& operator+=(const vec3<T>& a, vec3<T> b) {
 }
 
 template <typename T>
-inline vec3<T>& operator-=(const vec3<T>& a, vec3<T> b) {
+inline vec3<T>& operator-=(vec3<T>& a, vec3<T> b) {
     a.x -= b.x;
     a.y -= b.y;
     a.z -= b.z;
@@ -58,7 +57,7 @@ inline vec3<T>& operator-=(const vec3<T>& a, vec3<T> b) {
 }
 
 template <typename T>
-inline vec3<T>& operator*=(const vec3<T>& a, vec3<T> b) {
+inline vec3<T>& operator*=(vec3<T>& a, vec3<T> b) {
     a.x *= b.x;
     a.y *= b.y;
     a.z *= b.z;
@@ -66,7 +65,7 @@ inline vec3<T>& operator*=(const vec3<T>& a, vec3<T> b) {
 }
 
 template <typename T>
-inline vec3<T>& operator*=(const vec3<T>& a, T k) {
+inline vec3<T>& operator*=(vec3<T>& a, T k) {
     a.x *= k;
     a.y *= k;
     a.z *= k;
@@ -74,7 +73,7 @@ inline vec3<T>& operator*=(const vec3<T>& a, T k) {
 }
 
 template <typename T>
-inline vec3<T>& operator/=(const vec3<T>& a, T k) {
+inline vec3<T>& operator/=(vec3<T>& a, T k) {
     a.x /= k;
     a.y /= k;
     a.z /= k;

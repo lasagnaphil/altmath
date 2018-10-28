@@ -97,6 +97,8 @@ inline bool operator!=(vec4<T> a, vec4<T> b) {
 }
 
 using vec4f = vec4<float>;
+using vec3fx = vec4<float>;
+using vec2fx = vec4<float>;
 using vec4d = vec4<double>;
 using vec4i = vec4<int>;
 
