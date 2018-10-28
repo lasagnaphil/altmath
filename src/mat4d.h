@@ -79,15 +79,20 @@ inline mat4d operator*(const mat4d& a, const mat4d& b) {
     return res;
 }
 
+// Kudos to https://stackoverflow.com/questions/10454150/intel-avx-256-bits-version-of-dot-product-for-double-precision-floating-point-v
+
 inline vec4d operator*(const mat4d& a, vec4d v) {
     __m256d prod1 = _mm256_mul_pd(a.simd[0], v.simd);
     __m256d prod2 = _mm256_mul_pd(a.simd[1], v.simd);
     __m256d prod3 = _mm256_mul_pd(a.simd[2], v.simd);
     __m256d prod4 = _mm256_mul_pd(a.simd[3], v.simd);
 
-    return vec4d::from_simd(
-        _mm256_hadd_pd(_mm256_hadd_pd(prod1, prod2), _mm256_hadd_pd(prod3, prod4))
-    );
+    __m256d temp1 = _mm256_hadd_pd(prod1, prod2);
+    __m256d temp2 = _mm256_hadd_pd(prod3, prod4);
+    __m256d swapped = _mm256_permute2f128_pd(temp1, temp2, 0x21);
+    __m256d blended = _mm256_blend_pd(temp1, temp2, 0b1100);
+
+    return vec4d::from_simd(_mm256_add_pd(swapped, blended));
 }
 
 inline mat4d operator*(const mat4d& a, double k) {

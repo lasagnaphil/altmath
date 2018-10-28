@@ -79,9 +79,7 @@ TEST_CASE("mat4d works", "[mat4d]") {
                                 152.0, 174.0, 196.0, 218.0,
                                 248.0, 286.0, 324.0, 362.0,
                                 344.0, 398.0, 452.0, 506.0});
-        vec4d res = a * v;
-        printf("%f %f %f %f", res.x, res.y, res.z, res.w);
-        REQUIRE(res == vec4d {20.0, 60.0, 100.0, 140.0});
+        REQUIRE(a * v == vec4d {20.0, 60.0, 100.0, 140.0});
     }
 }
 
