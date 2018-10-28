@@ -5,10 +5,12 @@
 #ifndef ALTMATH_MAT4D_H
 #define ALTMATH_MAT4D_H
 
-#include <immintrin.h>
+#include "mat4.h"
 #include "vec4d.h"
+#include <immintrin.h>
 
-struct mat4d {
+template <>
+struct mat4<double> {
     union {
         double data[16];
         __m256d simd[4];

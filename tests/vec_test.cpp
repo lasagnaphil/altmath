@@ -3,40 +3,40 @@
 //
 
 #include <catch.hpp>
-#include "vec2fp.h"
-#include "vec3fp.h"
+#include "vec2.h"
+#include "vec3.h"
 #include "vec4f.h"
 #include "vec2d.h"
-#include "vec3dp.h"
 #include "vec4d.h"
+#include "vec_utils.h"
 
 TEST_CASE("vec2f works", "[vec2f]") {
     SECTION("Is POD") {
-        REQUIRE(std::is_pod<vec2fp>());
+        REQUIRE(std::is_pod<vec2f>());
     }
     SECTION("Arithmetic") {
-        vec2fp a {1.f, 2.f};
-        vec2fp b {3.f, 4.f};
-        REQUIRE(a + b == vec2fp {4.f, 6.f});
-        REQUIRE(a - b == vec2fp {-2.f, -2.f});
-        REQUIRE(a * b == vec2fp {3.f, 8.f});
-        REQUIRE(a * 2.f == vec2fp {2.f, 4.f});
-        REQUIRE(2.f * a == vec2fp {2.f, 4.f});
+        vec2f a {1.f, 2.f};
+        vec2f b {3.f, 4.f};
+        REQUIRE(a + b == vec2f {4.f, 6.f});
+        REQUIRE(a - b == vec2f {-2.f, -2.f});
+        REQUIRE(a * b == vec2f {3.f, 8.f});
+        REQUIRE(a * 2.f == vec2f {2.f, 4.f});
+        REQUIRE(2.f * a == vec2f {2.f, 4.f});
     }
 }
 
 TEST_CASE("vec3f works", "[vec3f]") {
     SECTION("Is POD") {
-        REQUIRE(std::is_pod<vec3fp>());
+        REQUIRE(std::is_pod<vec3f>());
     }
     SECTION("Arithmetic") {
-        vec3fp a {1.f, 2.f, 3.f};
-        vec3fp b {4.f, 5.f, 6.f};
-        REQUIRE(a + b == vec3fp {5.f, 7.f, 9.f});
-        REQUIRE(a - b == vec3fp {-3.f, -3.f, -3.f});
-        REQUIRE(a * b == vec3fp {4.f, 10.f, 12.f});
-        REQUIRE(a * 2.f == vec3fp {2.f, 4.f, 6.f});
-        REQUIRE(2.f * a == vec3fp {2.f, 4.f, 6.f});
+        vec3f a {1.f, 2.f, 3.f};
+        vec3f b {4.f, 5.f, 6.f};
+        REQUIRE(a + b == vec3f {5.f, 7.f, 9.f});
+        REQUIRE(a - b == vec3f {-3.f, -3.f, -3.f});
+        REQUIRE(a * b == vec3f {4.f, 10.f, 18.f});
+        REQUIRE(a * 2.f == vec3f {2.f, 4.f, 6.f});
+        REQUIRE(2.f * a == vec3f {2.f, 4.f, 6.f});
     }
 }
 
@@ -72,16 +72,16 @@ TEST_CASE("vec2d works", "[vec2d]") {
 
 TEST_CASE("vec3d works", "[vec3d]") {
     SECTION("Is POD") {
-        REQUIRE(std::is_pod<vec3dp>());
+        REQUIRE(std::is_pod<vec3d>());
     }
     SECTION("Arithmetic") {
-        vec3dp a {1.0, 2.0, 3.0};
-        vec3dp b {4.0, 5.0, 6.0};
-        REQUIRE(a + b == vec3dp {5.0, 7.0, 9.0});
-        REQUIRE(a - b == vec3dp {-3.0, -3.0, -3.0});
-        REQUIRE(a * b == vec3dp {4.0, 10.0, 12.0});
-        REQUIRE(a * 2.0 == vec3dp {2.0, 4.0, 6.0});
-        REQUIRE(2.0 * a == vec3dp {2.0, 4.0, 6.0});
+        vec3d a {1.0, 2.0, 3.0};
+        vec3d b {4.0, 5.0, 6.0};
+        REQUIRE(a + b == vec3d {5.0, 7.0, 9.0});
+        REQUIRE(a - b == vec3d {-3.0, -3.0, -3.0});
+        REQUIRE(a * b == vec3d {4.0, 10.0, 18.0});
+        REQUIRE(a * 2.0 == vec3d {2.0, 4.0, 6.0});
+        REQUIRE(2.0 * a == vec3d {2.0, 4.0, 6.0});
     }
 }
 

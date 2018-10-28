@@ -5,10 +5,13 @@
 #ifndef ALTMATH_VEC4D_H
 #define ALTMATH_VEC4D_H
 
+#include "vec4.h"
 #include <immintrin.h>
-struct vec4d {
+
+template <>
+struct vec4<double> {
     union {
-        struct { double x; double y; double z; double w; };
+        struct { double x, y, z, w; };
         __m256d simd;
     };
 
@@ -49,7 +52,6 @@ inline bool operator!=(vec4d a, vec4d b) {
     return !(a == b);
 }
 
-typedef vec4d vec4dp;
-typedef vec4d vec3d;
+using vec3dx = vec4d;
 
 #endif //ALTMATH_VEC4D_H

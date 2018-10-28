@@ -2,25 +2,27 @@
 // Created by lasagnaphil on 2018-10-27.
 //
 
-#ifndef ALTMATH_MAT4_H
-#define ALTMATH_MAT4_H
+#ifndef ALTMATH_MAT4F_H
+#define ALTMATH_MAT4F_H
 
 // NOTE: because of trying to implement simple and fast multiplication,
 // the matrix only uses xmm registers (SSE).
 // Later I would try writing an AVX version.
 // Useful link: https://stackoverflow.com/questions/18499971/efficient-4x4-matrix-multiplication-c-vs-assembly
 
-#include <immintrin.h>
+#include "mat4.h"
 #include "vec4f.h"
+#include <immintrin.h>
 
-struct mat4f {
+template <>
+struct mat4<float> {
     union {
         float data[16];
         __m128 simd[4];
     };
 
-    static mat4f from_simd(__m128 simd0, __m128 simd1, __m128 simd2, __m128 simd3) {
-        mat4f mat;
+    static mat4<float> from_simd(__m128 simd0, __m128 simd1, __m128 simd2, __m128 simd3) {
+        mat4<float> mat;
         mat.simd[0] = simd0;
         mat.simd[1] = simd1;
         mat.simd[2] = simd2;
@@ -36,6 +38,8 @@ struct mat4f {
         return data[i];
     }
 };
+
+using mat4f = mat4<float>;
 
 inline bool operator==(const mat4f& a, const mat4f& b) {
     return _mm_movemask_ps(_mm_cmpeq_ps(a.simd[0], b.simd[0])) == 0xf &&
@@ -119,4 +123,4 @@ inline mat4f operator*(float k, const mat4f& a) {
     return mat4f::from_simd(v1, v2, v3, v4);
 }
 
-#endif //ALTMATH_MAT4_H
+#endif //ALTMATH_MAT4F_H
