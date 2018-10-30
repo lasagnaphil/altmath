@@ -20,24 +20,23 @@ inline vec2<T> operator-(vec2<T> a, vec2<T> b) {
     return {a.x - b.x, a.y - b.y};
 }
 
-
 template <typename T>
 inline vec2<T> operator*(vec2<T> a, vec2<T> b) {
     return {a.x * b.x, a.y * b.y};
 }
 
-template <typename T, typename U>
-inline vec2<T> operator*(vec2<T> a, U k) {
+template <typename T>
+inline vec2<T> operator*(vec2<T> a, T k) {
     return {k * a.x, k * a.y};
 }
 
-template <typename T, typename U>
-inline vec2<T> operator*(U k, vec2<T> a) {
+template <typename T>
+inline vec2<T> operator*(T k, vec2<T> a) {
     return {k * a.x, k * a.y};
 }
 
-template <typename T, typename U>
-inline vec2<T> operator/(vec2<T> a, U k) {
+template <typename T>
+inline vec2<T> operator/(vec2<T> a, T k) {
     return {a.x / k, a.y / k};
 }
 

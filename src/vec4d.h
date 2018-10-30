@@ -36,12 +36,46 @@ inline vec4d operator*(vec4d a, vec4d b) {
 
 inline vec4d operator*(vec4d a, double k) {
     __m256d ksimd = _mm256_broadcast_sd(&k);
-    return vec4d::from_simd(_mm256_mul_pd(ksimd, a.simd));
+    return vec4d::from_simd(_mm256_mul_pd(a.simd, ksimd));
 }
 
 inline vec4d operator*(double k, vec4d a) {
     __m256d ksimd = _mm256_broadcast_sd(&k);
-    return vec4d::from_simd(_mm256_mul_pd(ksimd, a.simd));
+    return vec4d::from_simd(_mm256_mul_pd(a.simd, ksimd));
+}
+
+inline vec4d operator/(vec4d a, double k) {
+    __m256d ksimd = _mm256_broadcast_sd(&k);
+    return vec4d::from_simd(_mm256_div_pd(a.simd, ksimd));
+}
+
+inline vec4d& operator+=(vec4d& a, vec4d b) {
+    a.simd = _mm256_add_pd(a.simd, b.simd);
+    return a;
+}
+
+template <typename T>
+inline vec4d& operator-=(vec4d& a, vec4d b) {
+    a.simd = _mm256_sub_pd(a.simd, b.simd);
+    return a;
+}
+
+template <typename T>
+inline vec4d& operator*=(vec4d& a, vec4d b) {
+    a.simd = _mm256_mul_pd(a.simd, b.simd);
+    return a;
+}
+
+inline vec4d& operator*=(vec4d& a, double k) {
+    __m256d ksimd = _mm256_broadcast_sd(&k);
+    a.simd = _mm256_mul_pd(a.simd, ksimd);
+    return a;
+}
+
+inline vec4d& operator/=(vec4d& a, double k) {
+    __m256d ksimd = _mm256_broadcast_sd(&k);
+    a.simd = _mm256_div_pd(a.simd, ksimd);
+    return a;
 }
 
 inline bool operator==(vec4d a, vec4d b) {

@@ -40,12 +40,44 @@ inline vec2d operator*(vec2d a, vec2d b) {
 
 inline vec2d operator*(vec2d a, double k) {
     __m128d ksimd = _mm_load1_pd(&k);
-    return vec2d::from_simd(_mm_mul_pd(ksimd, a.simd));
+    return vec2d::from_simd(_mm_mul_pd(a.simd, ksimd));
 }
 
 inline vec2d operator*(double k, vec2d a) {
     __m128d ksimd = _mm_load1_pd(&k);
-    return vec2d::from_simd(_mm_mul_pd(ksimd, a.simd));
+    return vec2d::from_simd(_mm_mul_pd(a.simd, ksimd));
+}
+
+inline vec2d operator/(vec2d a, double k) {
+    __m128d ksimd = _mm_load1_pd(&k);
+    return vec2d::from_simd(_mm_div_pd(a.simd, ksimd));
+}
+
+inline vec2d& operator+=(vec2d& a, vec2d b) {
+    a.simd = _mm_add_pd(a.simd, b.simd);
+    return a;
+}
+
+inline vec2d& operator-=(vec2d& a, vec2d b) {
+    a.simd = _mm_sub_pd(a.simd, b.simd);
+    return a;
+}
+
+inline vec2d& operator*=(vec2d& a, vec2d b) {
+    a.simd = _mm_mul_pd(a.simd, b.simd);
+    return a;
+}
+
+inline vec2d& operator*=(vec2d& a, double k) {
+    __m128d ksimd = _mm_load1_pd(&k);
+    a.simd = _mm_mul_pd(a.simd, ksimd);
+    return a;
+}
+
+inline vec2d& operator/=(vec2d& a, double k) {
+    __m128d ksimd = _mm_load1_pd(&k);
+    a.simd = _mm_div_pd(a.simd, ksimd);
+    return a;
 }
 
 inline bool operator==(vec2d a, vec2d b) {

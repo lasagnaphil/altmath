@@ -34,20 +34,17 @@ inline vec4f operator*(vec4f a, vec4f b) {
     return vec4f::from_simd(_mm_mul_ps(a.simd, b.simd));
 }
 
-template <typename U>
-inline vec4f operator*(vec4f a, U k) {
+inline vec4f operator*(vec4f a, float k) {
     __m128 ksimd = _mm_set1_ps((float)k);
-    return vec4f::from_simd(_mm_mul_ps(ksimd, a.simd));
+    return vec4f::from_simd(_mm_mul_ps(a.simd, ksimd));
 }
 
-template <typename U>
-inline vec4f operator*(U k, vec4f a) {
+inline vec4f operator*(float k, vec4f a) {
     __m128 ksimd = _mm_set1_ps((float)k);
-    return vec4f::from_simd(_mm_mul_ps(ksimd, a.simd));
+    return vec4f::from_simd(_mm_mul_ps(a.simd, ksimd));
 }
 
-template <typename U>
-inline vec4f operator/(vec4f a, U k) {
+inline vec4f operator/(vec4f a, float k) {
     __m128 ksimd = _mm_set1_ps((float)k);
     return vec4f::from_simd(_mm_div_ps(a.simd, ksimd));
 }
@@ -69,17 +66,15 @@ inline vec4f& operator*=(vec4f& a, vec4f b) {
     return a;
 }
 
-template <typename U>
-inline vec4f& operator*=(vec4f& a, U k) {
+inline vec4f& operator*=(vec4f& a, float k) {
     __m128 ksimd = _mm_set1_ps(k);
-    a.simd = _mm_mul_ps(ksimd, a.simd);
+    a.simd = _mm_mul_ps(a.simd, ksimd);
     return a;
 }
 
-template <typename U>
-inline vec4f& operator/=(vec4f& a, U k) {
-    __m128 ksimd = _mm_set1_ps((float)k);
-    a.simd = _mm_div_ps(ksimd, a.simd);
+inline vec4f& operator/=(vec4f& a, float k) {
+    __m128 ksimd = _mm_set1_ps(k);
+    a.simd = _mm_div_ps(a.simd, ksimd);
     return a;
 }
 

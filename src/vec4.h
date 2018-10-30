@@ -7,7 +7,7 @@
 
 template <typename T>
 struct vec4 {
-    float x, y, z, w;
+    T x, y, z, w;
 };
 
 template <typename T>
@@ -25,24 +25,24 @@ inline vec4<T> operator*(vec4<T> a, vec4<T> b) {
     return {a.x * b.x, a.y * b.y, a.z * b.z, a.w * b.w};
 }
 
-template <typename T, typename U>
-inline vec4<T> operator*(vec4<T> a, U k) {
+template <typename T>
+inline vec4<T> operator*(vec4<T> a, T k) {
     return {k * a.x, k * a.y, k * a.z, k * a.w};
 }
 
-template <typename T, typename U>
-inline vec4<T> operator*(U k, vec4<T> a) {
+template <typename T>
+inline vec4<T> operator*(T k, vec4<T> a) {
     return {k * a.x, k * a.y, k * a.z, k * a.w};
 }
 
 
-template <typename T, typename U>
-inline vec4<T> operator/(vec4<T> a, U k) {
+template <typename T>
+inline vec4<T> operator/(vec4<T> a, T k) {
     return {a.x / k, a.y / k, a.z / k, a.w / k};
 }
 
 template <typename T>
-inline vec4<T>& operator+=(const vec4<T>& a, vec4<T> b) {
+inline vec4<T>& operator+=(vec4<T>& a, vec4<T> b) {
     a.x += b.x;
     a.y += b.y;
     a.z += b.z;
@@ -51,7 +51,7 @@ inline vec4<T>& operator+=(const vec4<T>& a, vec4<T> b) {
 }
 
 template <typename T>
-inline vec4<T>& operator-=(const vec4<T>& a, vec4<T> b) {
+inline vec4<T>& operator-=(vec4<T>& a, vec4<T> b) {
     a.x -= b.x;
     a.y -= b.y;
     a.z -= b.z;
@@ -60,7 +60,7 @@ inline vec4<T>& operator-=(const vec4<T>& a, vec4<T> b) {
 }
 
 template <typename T>
-inline vec4<T>& operator*=(const vec4<T>& a, vec4<T> b) {
+inline vec4<T>& operator*=(vec4<T>& a, vec4<T> b) {
     a.x *= b.x;
     a.y *= b.y;
     a.z *= b.z;
@@ -69,7 +69,7 @@ inline vec4<T>& operator*=(const vec4<T>& a, vec4<T> b) {
 }
 
 template <typename T>
-inline vec4<T>& operator*=(const vec4<T>& a, T k) {
+inline vec4<T>& operator*=(vec4<T>& a, T k) {
     a.x *= k;
     a.y *= k;
     a.z *= k;
@@ -78,7 +78,7 @@ inline vec4<T>& operator*=(const vec4<T>& a, T k) {
 }
 
 template <typename T>
-inline vec4<T>& operator/=(const vec4<T>& a, T k) {
+inline vec4<T>& operator/=(vec4<T>& a, T k) {
     a.x /= k;
     a.y /= k;
     a.z /= k;

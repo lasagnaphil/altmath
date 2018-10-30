@@ -27,6 +27,7 @@ namespace aml {
         return vec3<T> {v.x, v.y, v.z};
     }
 
+    // TODO: use SIMD for norm() (vec2f, vec4f, vec2d, vec4d)
     template <typename T>
     T norm(vec2<T> v) {
         return sqrt(v.x * v.x + v.y * v.y);
