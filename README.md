@@ -4,13 +4,13 @@
 
 ## Motivation
 
-Tired of finding a C++ math library that was just right for graphics and physics simulations, I decided to reinvent the wheel this time and made my own. (I promise: this wheel will actually be round this time!)
+Tired of finding a C++ math library that was just right for graphics and physics simulations, I decided to reinvent the wheel and make my own. (I promise: this wheel will actually be round this time!)
 
 It follows these rules:
 
 - All structs are POD (Plain-Old Data) types. 
 
-  This is often overlooked and never applied to any C++ library. I think vectors should be POD, so when you hand in an array of vec3's to OpenGL/Vulkan/etc..., you can guarantee that they are aligned as what you need to be. Other C++ libraries actually just "assume" that even if vec3 is not POD, it would have the fields x, y, and z contiguously like a POD layout. This assumption is not specified by the C++ standard, so this is actually relying on compiler-specific behavior! (Although it seems like nobody had any problems with this, so maybe I am overreacting.) As an added bonus, I can easily make this library C-compatible if I want.
+  This is often overlooked and never applied to any C++ library. I think vectors should be POD, so when you hand in an array of ``vec3``'s to OpenGL/Vulkan/etc..., you can guarantee that they are aligned the same as ``float[3]``. Other C++ libraries actually just "assume" that even if vec3 is not POD, it would have the fields x, y, and z contiguously like a POD layout. This assumption is not specified by the C++ standard, so this is actually relying on compiler-specific behavior! (Although it seems like nobody had any problems with this, so maybe I am overreacting. For an explanation, check out this ![link](https://stackoverflow.com/questions/17197373/can-glm-be-used-as-plain-old-data-in-gluniformx).) As an added bonus, I can easily make this library C-compatible if I want.
   
 - Use SIMD aggressively (like, the lastest shiny stuff like AVX/FMA).
 
