@@ -5,6 +5,8 @@
 #ifndef ALTMATH_VEC3_H
 #define ALTMATH_VEC3_H
 
+#include <math.h>
+
 template <typename T>
 struct vec3 {
     T x, y, z;
@@ -96,6 +98,11 @@ using vec3i = vec3<int>;
 
 namespace aml {
     template <typename T>
+    inline T dot(vec3<T> a, vec3<T> b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z;
+    }
+
+    template <typename T>
     inline vec3<T> cross(vec3<T> a, vec3<T> b) {
         return vec3<T> {
             a.y * b.z - a.z * b.y,
@@ -106,11 +113,11 @@ namespace aml {
 
     template <typename T>
     inline T norm(vec3<T> v) {
-        return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+        return sqrt(dot(v, v));
     }
     template <typename T>
     inline T normsq(vec3<T> v) {
-        return v.x * v.x + v.y * v.y + v.z * v.z;
+        return dot(v, v);
     }
     template <typename T>
     inline vec3<T> normalize(vec3<T> v) {

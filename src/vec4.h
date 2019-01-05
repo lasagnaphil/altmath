@@ -5,6 +5,8 @@
 #ifndef ALTMATH_VEC4_H
 #define ALTMATH_VEC4_H
 
+#include <math.h>
+
 template <typename T>
 struct vec4 {
     T x, y, z, w;
@@ -102,6 +104,11 @@ using vec4i = vec4<int>;
 
 namespace aml {
     template <typename T>
+    inline T dot(vec4<T> a, vec4<T> b) {
+        return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w;
+    }
+
+    template <typename T>
     inline vec4<T> cross(vec4<T> a, vec4<T> b) {
         return vec4<T> {
             a.y * b.z - a.z * b.y,
@@ -112,12 +119,12 @@ namespace aml {
 
     template <typename T>
     inline T norm(vec4<T> v) {
-        return sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w + v.w);
+        return sqrt(dot(v, v));
     }
 
     template <typename T>
     inline T normsq(vec4<T> v) {
-        return v.x * v.x + v.y * v.y + v.z * v.z + v.w + v.w;
+        return dot(v, v);
     }
 
     template <typename T>

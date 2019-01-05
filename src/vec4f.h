@@ -87,6 +87,16 @@ inline bool operator!=(vec4f a, vec4f b) {
 }
 
 namespace aml {
+    // FROM: https://stackoverflow.com/questions/6996764/fastest-way-to-do-horizontal-float-vector-sum-on-x86
+    template <>
+    inline float dot(vec4f a, vec4f b) {
+        __m128 m = _mm_mul_ps(a.simd, b.simd);
+        __m128 shuf = _mm_movehdup_ps(m);        // broadcast elements 3,1 to 2,0
+        __m128 sums = _mm_add_ps(m, shuf);
+        shuf        = _mm_movehl_ps(shuf, sums); // high half -> low half
+        sums        = _mm_add_ss(sums, shuf);
+        return        _mm_cvtss_f32(sums);
+    }
 
     template <typename T>
     inline vec4f cross(vec4f a, vec4f b) {
@@ -95,17 +105,6 @@ namespace aml {
         __m128 b1 = _mm_shuffle_ps(b.simd, b.simd, _MM_SHUFFLE(3, 1, 0, 2));
         __m128 b2 = _mm_shuffle_ps(b.simd, b.simd, _MM_SHUFFLE(3, 0, 2, 1));
         return vec4f::from_simd(_mm_sub_ps(_mm_mul_ps(a1, b1), _mm_mul_ps(a2, b2)));
-    }
-
-    // FROM: https://stackoverflow.com/questions/6996764/fastest-way-to-do-horizontal-float-vector-sum-on-x86
-    template <>
-    inline float normsq(vec4f v) {
-        __m128 m = _mm_mul_ps(v.simd, v.simd);
-        __m128 shuf = _mm_movehdup_ps(m);        // broadcast elements 3,1 to 2,0
-        __m128 sums = _mm_add_ps(m, shuf);
-        shuf        = _mm_movehl_ps(shuf, sums); // high half -> low half
-        sums        = _mm_add_ss(sums, shuf);
-        return        _mm_cvtss_f32(sums);
     }
 
     template <>

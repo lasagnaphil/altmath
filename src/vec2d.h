@@ -90,9 +90,9 @@ inline bool operator!=(vec2d a, vec2d b) {
 
 namespace aml {
     template <>
-    inline double normsq(vec2d v) {
+    inline double dot(vec2d a, vec2d b) {
         vec2d m;
-        m.simd = _mm_mul_pd(v.simd, v.simd);
+        m.simd = _mm_mul_pd(a.simd, b.simd);
         return m.x + m.y;
     }
 

@@ -32,47 +32,47 @@ namespace aml {
 
     template <typename T>
     mat4<T> transMat(vec3<T> trans) {
-        return mat4<T> {1, 0, 0, trans.x,
-                        0, 1, 0, trans.y,
-                        0, 0, 1, trans.z,
-                        0, 0, 0, 1};
+        return mat4<T> {1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        trans.x, trans.y, trans.z, 1};
     }
 
     template <typename T>
     mat4<T> transMat(vec4<T> trans) {
-        return mat4<T> {1, 0, 0, trans.x,
-                        0, 1, 0, trans.y,
-                        0, 0, 1, trans.z,
-                        0, 0, 0, 1};
+        return mat4<T> {1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        trans.x, trans.y, trans.z, 1};
     }
 
     template <typename T>
     mat4<T> lookAt(vec3<T> eye, vec3<T> center, vec3<T> up) {
 
-        auto f = normalize3d(eye - center);
-        auto r = normalize3d(cross(up, f));
+        auto f = normalize(eye - center);
+        auto r = normalize(cross(up, f));
         auto u = cross(f, r);
 
         return mat4<T> {
-            r.x, r.y, r.z, -dot3d(r, eye),
-            u.x, u.y, u.z, -dot3d(u, eye),
-            f.x, f.y, f.z, -dot3d(f, eye),
+            r.x, r.y, r.z, -dot(r, eye),
+            u.x, u.y, u.z, -dot(u, eye),
+            f.x, f.y, f.z, -dot(f, eye),
             0, 0, 0, 1.0f
         };
     }
 
     template <typename T>
-    mat4<T> ortho(T left, T right, T bottom, T top, T znear, T zfar) {
-        return mat4<T>{2 / (right - left), 0, 0, 0, 0,
-                       2 / (top - bottom), 0, 0, 0, 0,
-                       -2 / (zfar - znear), 0,
+    mat4<T> ortho(T left, T right, T bottom, T top, T znear, T zfar, T handedness = 1) {
+        return mat4<T>{(T)2 / (right - left), 0, 0, 0, 0,
+                       (T)2 / (top - bottom), 0, 0, 0, 0,
+                       -(T)2 * handedness / (zfar - znear), 0,
                        -(right + left) / (right - left),
                        -(top + bottom) / (top - bottom),
-                       -(zfar + znear) / (zfar - znear), 1};
+                       -(zfar + znear) / (zfar - znear), (T)1};
     }
 
     template <typename T>
-    mat4<T> perspective(float l, float r, float b, float t, float n, float f) {
+    static mat4<T> perspective(T l, T r, T b, T t, T n, T f) {
         return {
                 2 * n / (r - l), 0, 0, 0,
                 0, 2 * n / (t - b), 0, 0,
@@ -82,11 +82,17 @@ namespace aml {
     }
 
     template <typename T>
-    static mat4<T> perspective(T fovY, T aspect, T front, T back) {
-        T tangent = tan(radians(fovY/2));
-        T height = front * tangent;
-        T width = height * aspect;
-        return mat4<T>::perspective(-width, width, -height, height, front, back);
+    static mat4<T> perspective(T fovY, T aspect, T znear, T zfar, T handedness = 1) {
+        T y = 1 / tan(fovY * (T)0.5);
+        T x = y / aspect;
+        T zdist = znear - zfar;
+        T zfar_per_zdist = zfar/zdist;
+        return {
+            x, 0, 0, 0,
+            0, y, 0, 0,
+            0, 0, zfar_per_zdist * handedness, -1 * handedness,
+            0, 0, 2.0f * znear * zfar_per_zdist, 0
+        };
     }
 
     template <typename T>

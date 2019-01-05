@@ -5,6 +5,8 @@
 #ifndef ALTMATH_VEC2_H
 #define ALTMATH_VEC2_H
 
+#include <math.h>
+
 template <typename T>
 struct vec2 {
     T x, y;
@@ -91,13 +93,18 @@ using vec2i = vec2<int>;
 
 namespace aml {
     template <typename T>
+    inline T dot(vec2<T> a, vec2<T> b) {
+        return a.x * b.x + a.y * b.y;
+    }
+
+    template <typename T>
     inline T norm(vec2<T> v) {
-        return sqrt(v.x * v.x + v.y * v.y);
+        return sqrt(dot(v, v));
     }
 
     template <typename T>
     inline T normsq(vec2<T> v) {
-        return v.x * v.x + v.y * v.y;
+        return dot(v, v);
     }
 
     template <typename T>

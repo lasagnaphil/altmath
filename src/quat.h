@@ -81,6 +81,19 @@ using quati = quat<int>;
 
 namespace aml {
     template <typename T>
+    inline quat<T> quatAngleAxis(T angle, vec3<T> axis) {
+        const T halfAngle = (T)0.5 * angle;
+        vec3<T> v = aml::normalize(axis) * (T) sin(halfAngle);
+        quat<T> q;
+        q.x = v.x;
+        q.y = v.y;
+        q.z = v.z;
+        q.w = (T) cos(halfAngle);
+
+        return q;
+    }
+
+    template <typename T>
     inline quat<T> conj(quat<T> q) {
         return quat<T> {-q.x, -q.y, -q.z, -q.w};
     }
