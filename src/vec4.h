@@ -97,9 +97,24 @@ inline bool operator!=(vec4<T> a, vec4<T> b) {
 }
 
 using vec4f = vec4<float>;
-using vec3fx = vec4<float>;
-using vec2fx = vec4<float>;
 using vec4d = vec4<double>;
 using vec4i = vec4<int>;
+
+namespace aml {
+    template <typename T>
+    inline T norm(vec4<T> v) {
+        return sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w + v.w);
+    }
+
+    template <typename T>
+    inline T normsq(vec4<T> v) {
+        return v.x * v.x + v.y * v.y + v.z * v.z + v.w + v.w;
+    }
+
+    template <typename T>
+    inline vec4<T> normalize(vec4<T> v) {
+        return v / norm(v);
+    }
+}
 
 #endif //ALTMATH_VEC4_H

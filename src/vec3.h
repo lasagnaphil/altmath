@@ -94,4 +94,19 @@ using vec3f = vec3<float>;
 using vec3d = vec3<double>;
 using vec3i = vec3<int>;
 
+namespace aml {
+    template <typename T>
+    inline T norm(vec3<T> v) {
+        return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+    }
+    template <typename T>
+    inline T normsq(vec3<T> v) {
+        return v.x * v.x + v.y * v.y + v.z * v.z;
+    }
+    template <typename T>
+    inline vec3<T> normalize(vec3<T> v) {
+        return v / norm(v);
+    }
+}
+
 #endif //ALTMATH_VEC3_H

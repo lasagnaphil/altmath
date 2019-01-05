@@ -89,4 +89,21 @@ using vec2f = vec2<float>;
 using vec2d = vec2<double>;
 using vec2i = vec2<int>;
 
+namespace aml {
+    template <typename T>
+    inline T norm(vec2<T> v) {
+        return sqrt(v.x * v.x + v.y * v.y);
+    }
+
+    template <typename T>
+    inline T normsq(vec2<T> v) {
+        return v.x * v.x + v.y * v.y;
+    }
+
+    template <typename T>
+    inline vec2<T> normalize(vec2<T> v) {
+        return v / norm(v);
+    }
+}
+
 #endif //ALTMATH_VEC2_H

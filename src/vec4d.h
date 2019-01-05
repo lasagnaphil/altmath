@@ -86,6 +86,21 @@ inline bool operator!=(vec4d a, vec4d b) {
     return !(a == b);
 }
 
-using vec3dx = vec4d;
+namespace aml {
+    template <>
+    inline double normsq(vec4d v) {
+        __m256d m = _mm256_mul_pd(v.simd, v.simd);
+        __m256d temp = _mm256_hadd_pd(m, m);
+        __m128d lo = _mm256_extractf128_pd(temp, 0);
+        __m128d hi = _mm256_extractf128_pd(temp, 1);
+        __m128d dp = _mm_add_pd(lo, hi);
+        return _mm_cvtsd_f64(dp);
+    }
+
+    template <>
+    inline double norm(vec4d v) {
+        return sqrt(normsq(v));
+    }
+}
 
 #endif //ALTMATH_VEC4D_H

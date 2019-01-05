@@ -4,6 +4,7 @@
 
 #include <catch.hpp>
 #include "quat.h"
+#include "mat_utils.h"
 
 TEST_CASE("quatf works", "[quatf]") {
     SECTION("Is POD") {

@@ -3,12 +3,13 @@
 //
 
 #include <catch.hpp>
+
 #include "vec2.h"
 #include "vec3.h"
+#include "vec4.h"
 #include "vec4f.h"
 #include "vec2d.h"
 #include "vec4d.h"
-#include "vec_utils.h"
 
 TEST_CASE("vec2f works", "[vec2f]") {
     SECTION("Is POD") {
@@ -33,6 +34,10 @@ TEST_CASE("vec2f works", "[vec2f]") {
         REQUIRE(a == vec2f {6.f, 16.f});
         a /= 2.f;
         REQUIRE(a == vec2f {3.f, 8.f});
+    }
+    SECTION("Utility") {
+        vec2f a {1.f, 2.f};
+        REQUIRE(aml::normsq(a) == 5.f);
     }
 }
 
@@ -60,6 +65,10 @@ TEST_CASE("vec3f works", "[vec3f]") {
         a /= 2.f;
         REQUIRE(a == vec3f {4.f, 10.f, 18.f});
     }
+    SECTION("Utility") {
+        vec3f a {1.f, 2.f, 3.f};
+        REQUIRE(aml::normsq(a) == 14.f);
+    }
 }
 
 TEST_CASE("vec4f works", "[vec4f]") {
@@ -85,6 +94,10 @@ TEST_CASE("vec4f works", "[vec4f]") {
         REQUIRE(a == vec4f {10.f, 24.f, 42.f, 64.f});
         a /= 2.f;
         REQUIRE(a == vec4f {5.f, 12.f, 21.f, 32.f});
+    }
+    SECTION("Utility") {
+        vec4f a {1.f, 2.f, 3.f, 4.f};
+        REQUIRE(aml::normsq(a) == 30.f);
     }
 }
 
@@ -112,6 +125,10 @@ TEST_CASE("vec2d works", "[vec2d]") {
         a /= 2.f;
         REQUIRE(a == vec2d {3.0, 8.0});
     }
+    SECTION("Utility") {
+        vec2d a {1.0, 2.0};
+        REQUIRE(aml::normsq(a) == 5.0);
+    }
 }
 
 TEST_CASE("vec3d works", "[vec3d]") {
@@ -138,6 +155,10 @@ TEST_CASE("vec3d works", "[vec3d]") {
         a /= 2.0;
         REQUIRE(a == vec3d {4.0, 10.0, 18.0});
     }
+    SECTION("Utility") {
+        vec3d a {1.0, 2.0, 3.0};
+        REQUIRE(aml::normsq(a) == 14.0);
+    }
 }
 
 TEST_CASE("vec4d works", "[vec4d]") {
@@ -163,6 +184,10 @@ TEST_CASE("vec4d works", "[vec4d]") {
         REQUIRE(a == vec4d {10.0, 24.0, 42.0, 64.0});
         a /= 2.0;
         REQUIRE(a == vec4d {5.0, 12.0, 21.0, 32.0});
+    }
+    SECTION("Utility") {
+        vec4d a {1.0, 2.0, 3.0, 4.0};
+        REQUIRE(aml::normsq(a) == 30.0);
     }
 }
 

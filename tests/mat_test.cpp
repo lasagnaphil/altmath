@@ -9,9 +9,6 @@
 #include "vec4f.h"
 #include "vec4d.h"
 
-#include "mat_utils.h"
-#include "utility.h"
-
 TEST_CASE("mat4f works", "[mat4f]") {
     SECTION("Is POD") {
         REQUIRE(std::is_pod<mat4f>());

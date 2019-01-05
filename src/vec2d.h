@@ -88,4 +88,19 @@ inline bool operator!=(vec2d a, vec2d b) {
     return !(a == b);
 }
 
+namespace aml {
+    template <>
+    inline double normsq(vec2d v) {
+        vec2d m;
+        m.simd = _mm_mul_pd(v.simd, v.simd);
+        return m.x + m.y;
+    }
+
+    template <>
+    inline double norm(vec2d v) {
+        return sqrt(normsq(v));
+    }
+
+}
+
 #endif //ALTMATH_VEC2D_H
