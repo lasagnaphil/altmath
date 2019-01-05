@@ -11,7 +11,7 @@
 #include "vec4.h"
 #include "vec3.h"
 #include "vec_utils.h"
-#include "utility.h"
+#include "math_utils.h"
 
 namespace aml {
     template <typename T>
