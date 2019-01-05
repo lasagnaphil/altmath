@@ -91,9 +91,9 @@ namespace aml {
 
     template <typename T>
     mat4<T> toMatrix4(quat<T> q) {
-        T x2 = q.v0 * q.v0, y2 = q.v1 * q.v1, z2 = q.v2 * q.v2;
-        T sx = q.s * q.v0, sy = q.s * q.v1, sz = q.s * q.v2;
-        T xz = q.v0 * q.v2, yz = q.v1 * q.v2, xy = q.v0 * q.v1;
+        T x2 = q.x * q.x, y2 = q.y * q.y , z2 = q.z * q.z;
+        T sx = q.w * q.x, sy = q.w * q.y , sz = q.w * q.z;
+        T xz = q.x * q.z, yz = q.y * q.z , xy = q.x * q.y;
         return mat4<T>{
                 1 - 2 * (y2 + z2), 2 * (xy + sz), 2 * (xz - sy), 0.0f,
                 2 * (xy - sz), 1 - 2 * (x2 + z2), 2 * (sx + yz), 0.0f,
