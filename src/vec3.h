@@ -96,6 +96,15 @@ using vec3i = vec3<int>;
 
 namespace aml {
     template <typename T>
+    inline vec3<T> cross(vec3<T> a, vec3<T> b) {
+        return vec3<T> {
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        };
+    }
+
+    template <typename T>
     inline T norm(vec3<T> v) {
         return sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
     }

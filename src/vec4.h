@@ -102,6 +102,15 @@ using vec4i = vec4<int>;
 
 namespace aml {
     template <typename T>
+    inline vec4<T> cross(vec4<T> a, vec4<T> b) {
+        return vec4<T> {
+            a.y * b.z - a.z * b.y,
+            a.z * b.x - a.x * b.z,
+            a.x * b.y - a.y * b.x
+        };
+    }
+
+    template <typename T>
     inline T norm(vec4<T> v) {
         return sqrt(v.x * v.x + v.y * v.y + v.z * v.z + v.w + v.w);
     }

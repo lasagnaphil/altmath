@@ -67,7 +67,9 @@ TEST_CASE("vec3f works", "[vec3f]") {
     }
     SECTION("Utility") {
         vec3f a {1.f, 2.f, 3.f};
+        vec3f b {4.f, 5.f, 6.f};
         REQUIRE(aml::normsq(a) == 14.f);
+        REQUIRE(aml::cross(a, b) == vec3f {-3.f, 6.f, -3.f});
     }
 }
 
@@ -97,7 +99,13 @@ TEST_CASE("vec4f works", "[vec4f]") {
     }
     SECTION("Utility") {
         vec4f a {1.f, 2.f, 3.f, 4.f};
+        vec4f b {5.f, 6.f, 7.f, 8.f};
         REQUIRE(aml::normsq(a) == 30.f);
+
+        vec4f cross = aml::cross(a, b);
+        REQUIRE(cross.x == -4.f);
+        REQUIRE(cross.y == 8.f);
+        REQUIRE(cross.z == -4.f);
     }
 }
 
@@ -157,7 +165,9 @@ TEST_CASE("vec3d works", "[vec3d]") {
     }
     SECTION("Utility") {
         vec3d a {1.0, 2.0, 3.0};
+        vec3d b {4.0, 5.0, 6.0};
         REQUIRE(aml::normsq(a) == 14.0);
+        REQUIRE(aml::cross(a, b) == vec3d {-3.0, 6.0, -3.0});
     }
 }
 
@@ -187,7 +197,13 @@ TEST_CASE("vec4d works", "[vec4d]") {
     }
     SECTION("Utility") {
         vec4d a {1.0, 2.0, 3.0, 4.0};
+        vec4d b {5.0, 6.0, 7.0, 8.0};
         REQUIRE(aml::normsq(a) == 30.0);
+
+        vec4d cross = aml::cross(a, b);
+        REQUIRE(cross.x == -4.0);
+        REQUIRE(cross.y == 8.0);
+        REQUIRE(cross.z == -4.0);
     }
 }
 

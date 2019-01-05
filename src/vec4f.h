@@ -88,6 +88,15 @@ inline bool operator!=(vec4f a, vec4f b) {
 
 namespace aml {
 
+    template <typename T>
+    inline vec4f cross(vec4f a, vec4f b) {
+        __m128 a1 = _mm_shuffle_ps(a.simd, a.simd, _MM_SHUFFLE(3, 0, 2, 1));
+        __m128 a2 = _mm_shuffle_ps(a.simd, a.simd, _MM_SHUFFLE(3, 1, 0, 2));
+        __m128 b1 = _mm_shuffle_ps(b.simd, b.simd, _MM_SHUFFLE(3, 1, 0, 2));
+        __m128 b2 = _mm_shuffle_ps(b.simd, b.simd, _MM_SHUFFLE(3, 0, 2, 1));
+        return vec4f::from_simd(_mm_sub_ps(_mm_mul_ps(a1, b1), _mm_mul_ps(a2, b2)));
+    }
+
     // FROM: https://stackoverflow.com/questions/6996764/fastest-way-to-do-horizontal-float-vector-sum-on-x86
     template <>
     inline float normsq(vec4f v) {
