@@ -13,6 +13,7 @@
 #include "vec4d.h"
 
 namespace aml {
+
     template<typename T>
     inline vec2<T> xy(vec3<T> v) {
         return vec2<T>{v.x, v.y};

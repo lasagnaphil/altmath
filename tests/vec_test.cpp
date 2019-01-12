@@ -11,6 +11,9 @@
 #include "vec2d.h"
 #include "vec4d.h"
 
+#include "vec2dx4.h"
+#include "vec3dx4.h"
+
 TEST_CASE("vec2f works", "[vec2f]") {
     SECTION("Is POD") {
         REQUIRE(std::is_pod<vec2f>());
@@ -128,9 +131,9 @@ TEST_CASE("vec2d works", "[vec2d]") {
         REQUIRE(a == vec2d {1.0, 2.0});
         a *= b;
         REQUIRE(a == vec2d {3.0, 8.0});
-        a *= 2.f;
+        a *= 2.0;
         REQUIRE(a == vec2d {6.0, 16.0});
-        a /= 2.f;
+        a /= 2.0;
         REQUIRE(a == vec2d {3.0, 8.0});
     }
     SECTION("Utility") {
@@ -204,6 +207,156 @@ TEST_CASE("vec4d works", "[vec4d]") {
         REQUIRE(cross.x == -4.0);
         REQUIRE(cross.y == 8.0);
         REQUIRE(cross.z == -4.0);
+    }
+}
+
+TEST_CASE("vec2dx4 works", "[vec2dx4]") {
+    SECTION("Is POD") {
+        REQUIRE(std::is_pod<vec2dx4>());
+    }
+    SECTION("Arithmetic") {
+        vec2d a[4], b[4];
+        for (int i = 0; i < 4; i++) {
+            a[i].x = 4*i;
+            a[i].y = 4*i + 1;
+            b[i].x = 4*i + 2;
+            b[i].y = 4*i + 3;
+        }
+        vec2dx4 a4 = vec2dx4::load(a);
+        vec2dx4 b4 = vec2dx4::load(b);
+
+        REQUIRE(a4 == a4);
+        REQUIRE(a4 != b4);
+
+        vec2dx4 c4;
+        vec2d c[4];
+
+        c4 = a4 + b4;
+        for (int i = 0; i < 4; i++) {
+            c[i] = a[i] + b[i];
+        }
+        REQUIRE(c4 == vec2dx4::load(c));
+
+        c4 = a4 - b4;
+        for (int i = 0; i < 4; i++) {
+            c[i] = a[i] - b[i];
+        }
+        REQUIRE(c4 == vec2dx4::load(c));
+
+        c4 = a4 * b4;
+        for (int i = 0; i < 4; i++) {
+            c[i] = a[i] * b[i];
+        }
+        REQUIRE(c4 == vec2dx4::load(c));
+
+        c4 = a4 * 2.0;
+        for (int i = 0; i < 4; i++) {
+            c[i] = a[i] * 2.0;
+        }
+        REQUIRE(c4 == vec2dx4::load(c));
+
+        a4 += b4;
+        for (int i = 0; i < 4; i++) {
+            a[i] += b[i];
+        }
+        REQUIRE(a4 == vec2dx4::load(a));
+
+        a4 -= b4;
+        for (int i = 0; i < 4; i++) {
+            a[i] -= b[i];
+        }
+        REQUIRE(a4 == vec2dx4::load(a));
+
+        a4 *= b4;
+        for (int i = 0; i < 4; i++) {
+            a[i] *= b[i];
+        }
+        REQUIRE(a4 == vec2dx4::load(a));
+
+        vec4d anormsq = aml::normsq(a4);
+        REQUIRE(anormsq.x == aml::normsq(a[0]));
+        REQUIRE(anormsq.y == aml::normsq(a[1]));
+        REQUIRE(anormsq.z == aml::normsq(a[2]));
+        REQUIRE(anormsq.w == aml::normsq(a[3]));
+    }
+}
+
+TEST_CASE("vec3dx4 works", "[vec3dx4]") {
+    SECTION("Is POD") {
+        REQUIRE(std::is_pod<vec3dx4>());
+    }
+    SECTION("Arithmetic") {
+        vec3d a[4], b[4];
+        for (int i = 0; i < 4; i++) {
+            a[i].x = 6*i;
+            a[i].y = 6*i + 1;
+            a[i].z = 6*i + 2;
+            b[i].x = 6*i + 3;
+            b[i].y = 6*i + 4;
+            b[i].z = 6*i + 5;
+        }
+        vec3dx4 a4 = vec3dx4::load(a);
+        vec3dx4 b4 = vec3dx4::load(b);
+
+        REQUIRE(a4 == a4);
+        REQUIRE(a4 != b4);
+
+        vec3dx4 c4;
+        vec3d c[4];
+
+        c4 = a4 + b4;
+        for (int i = 0; i < 4; i++) {
+            c[i] = a[i] + b[i];
+        }
+        REQUIRE(c4 == vec3dx4::load(c));
+
+        c4 = a4 - b4;
+        for (int i = 0; i < 4; i++) {
+            c[i] = a[i] - b[i];
+        }
+        REQUIRE(c4 == vec3dx4::load(c));
+
+        c4 = a4 * b4;
+        for (int i = 0; i < 4; i++) {
+            c[i] = a[i] * b[i];
+        }
+        REQUIRE(c4 == vec3dx4::load(c));
+
+        c4 = a4 * 2.0;
+        for (int i = 0; i < 4; i++) {
+            c[i] = a[i] * 2.0;
+        }
+        REQUIRE(c4 == vec3dx4::load(c));
+
+        a4 += b4;
+        for (int i = 0; i < 4; i++) {
+            a[i] += b[i];
+        }
+        REQUIRE(a4 == vec3dx4::load(a));
+
+        a4 -= b4;
+        for (int i = 0; i < 4; i++) {
+            a[i] -= b[i];
+        }
+        REQUIRE(a4 == vec3dx4::load(a));
+
+        a4 *= b4;
+        for (int i = 0; i < 4; i++) {
+            a[i] *= b[i];
+        }
+        REQUIRE(a4 == vec3dx4::load(a));
+
+        c4 = aml::cross(a4, b4);
+        for (int i = 0; i < 4; i++) {
+            c[i] = aml::cross(a[i], b[i]);
+        }
+        REQUIRE(a4 == vec3dx4::load(a));
+
+        vec4d anormsq = aml::normsq(a4);
+        REQUIRE(anormsq.x == aml::normsq(a[0]));
+        REQUIRE(anormsq.y == aml::normsq(a[1]));
+        REQUIRE(anormsq.z == aml::normsq(a[2]));
+        REQUIRE(anormsq.w == aml::normsq(a[3]));
     }
 }
 

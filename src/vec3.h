@@ -10,6 +10,13 @@
 template <typename T>
 struct vec3 {
     T x, y, z;
+
+    static vec3 load(const T* v) {
+        return {v[0], v[1], v[2]};
+    }
+    void store(T* v) {
+        v[0] = x; v[1] = y; v[2] = z;
+    }
 };
 
 template <typename T>
