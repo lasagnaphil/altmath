@@ -5,17 +5,25 @@
 #ifndef ALTMATH_VEC2_H
 #define ALTMATH_VEC2_H
 
-#include <math.h>
+#include "math_utils.h"
 
 template <typename T>
 struct vec2 {
-    T x, y;
+    union {
+        struct {
+            T x, y;
+        };
+        T v[2];
+    };
 
-    static vec2 load(const T* v) {
-        return {v[0], v[1]};
+    static vec2 make(T v) {
+        return {v, v};
     }
-    void store(T* v) {
-        v[0] = x; v[1] = y;
+    static vec2 load(const T* in) {
+        return {in[0], in[1]};
+    }
+    void store(T* out) {
+        out[0] = x; out[1] = y;
     }
 };
 
@@ -25,8 +33,28 @@ inline vec2<T> operator+(vec2<T> a, vec2<T> b) {
 }
 
 template <typename T>
+inline vec2<T> operator+(vec2<T> a, T b) {
+    return {a.x + b, a.y + b};
+}
+
+template <typename T>
+inline vec2<T> operator+(T a, vec2<T> b) {
+    return {a + b.x, a + b.y};
+}
+
+template <typename T>
 inline vec2<T> operator-(vec2<T> a, vec2<T> b) {
     return {a.x - b.x, a.y - b.y};
+}
+
+template <typename T>
+inline vec2<T> operator-(vec2<T> a, T b) {
+    return {a.x - b, a.y - b};
+}
+
+template <typename T>
+inline vec2<T> operator-(T a, vec2<T> b) {
+    return {a - b.x, a - b.y};
 }
 
 template <typename T>

@@ -9,13 +9,21 @@
 
 template <typename T>
 struct vec3 {
-    T x, y, z;
+    union {
+        struct {
+            T x, y, z;
+        };
+        T v[3];
+    };
 
-    static vec3 load(const T* v) {
-        return {v[0], v[1], v[2]};
+    static vec3 make(T v) {
+        return {v, v, v};
     }
-    void store(T* v) {
-        v[0] = x; v[1] = y; v[2] = z;
+    static vec3 load(const T* in) {
+        return {in[0], in[1], in[2]};
+    }
+    void store(T* out) {
+        out[0] = x; out[1] = y; out[2] = z;
     }
 };
 
@@ -25,8 +33,28 @@ inline vec3<T> operator+(vec3<T> a, vec3<T> b) {
 }
 
 template <typename T>
+inline vec3<T> operator+(vec3<T> a, T b) {
+    return {a.x + b, a.y + b, a.z + b};
+}
+
+template <typename T>
+inline vec3<T> operator+(T a, vec3<T> b) {
+    return {a + b.x, a + b.y, a + b.z};
+}
+
+template <typename T>
 inline vec3<T> operator-(vec3<T> a, vec3<T> b) {
     return {a.x - b.x, a.y - b.y, a.z - b.z};
+}
+
+template <typename T>
+inline vec3<T> operator-(vec3<T> a, T b) {
+    return {a.x - b, a.y - b, a.z - b};
+}
+
+template <typename T>
+inline vec3<T> operator-(T a, vec3<T> b) {
+    return {a - b.x, a - b.y, a - b.z};
 }
 
 template <typename T>

@@ -16,9 +16,9 @@ struct vec3<vec4d> {
 
     static vec3<vec4d> load(const double* x, const double* y, const double *z) {
         return {
-            vec4d::load(x),
-            vec4d::load(y),
-            vec4d::load(z)
+                vec4d::loadAligned(x),
+            vec4d::loadAligned(y),
+            vec4d::loadAligned(z)
         };
     }
 
@@ -31,9 +31,9 @@ struct vec3<vec4d> {
     }
 
     void store(double* vx, double* vy, double* vz) {
-        x.store(vx);
-        y.store(vy);
-        z.store(vz);
+        x.storeAligned(vx);
+        y.storeAligned(vy);
+        z.storeAligned(vz);
     }
 };
 

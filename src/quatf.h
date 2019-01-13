@@ -86,7 +86,7 @@ inline quatf operator*(quatf p, quatf q) {
 
 template <>
 inline quatf operator*(quatf q, vec3f v) {
-    vec4f qv = vec4f::from_simd(q.simd);
+    vec4f qv = vec4f::fromSimd(q.simd);
     vec4f vnew = vec4f {v.x, v.y, v.z, 0.0};
     vec4f uv = aml::cross(qv, vnew);
     vec4f uuv = aml::cross(qv, uv);
@@ -97,7 +97,7 @@ inline quatf operator*(quatf q, vec3f v) {
 // TODO: optimize the two cross() invocations
 template <>
 inline quatf operator*(quatf q, vec4f v) {
-    vec4f qv = vec4f::from_simd(q.simd);
+    vec4f qv = vec4f::fromSimd(q.simd);
     vec4f uv = aml::cross(qv, v);
     vec4f uuv = aml::cross(qv, uv);
     vec4f res = v + ((uv * q.w) + uuv) * 2.f;
@@ -122,7 +122,7 @@ inline quatf operator/(quatf q, float k) {
 namespace aml {
     template <>
     inline float norm(quatf q) {
-        return norm(vec4f::from_simd(q.simd));
+        return norm(vec4f::fromSimd(q.simd));
     }
 }
 

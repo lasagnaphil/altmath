@@ -9,13 +9,21 @@
 
 template <typename T>
 struct vec4 {
-    T x, y, z, w;
+    union {
+        struct {
+            T x, y, z, w;
+        };
+        T v[4];
+    };
 
-    static vec4 load(const T* v) {
-        return {v[0], v[1], v[2], v[3]};
+    static vec4 make(T x) {
+        return {x, x, x, x};
     }
-    void store(T* v) {
-        v[0] = x; v[1] = y; v[2] = z; v[3] = w;
+    static vec4 load(const T* in) {
+        return {in[0], in[1], in[2], in[3]};
+    }
+    void store(T* out) {
+        out[0] = x; out[1] = y; out[2] = z; out[3] = w;
     }
 };
 
@@ -25,8 +33,28 @@ inline vec4<T> operator+(vec4<T> a, vec4<T> b) {
 }
 
 template <typename T>
+inline vec4<T> operator+(vec4<T> a, T b) {
+    return {a.x + b, a.y + b, a.z + b, a.w + b};
+}
+
+template <typename T>
+inline vec4<T> operator+(T a, vec4<T> b) {
+    return {a + b.x, a + b.y, a + b.z, a + b.w};
+}
+
+template <typename T>
 inline vec4<T> operator-(vec4<T> a, vec4<T> b) {
     return {a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w};
+}
+
+template <typename T>
+inline vec4<T> operator-(vec4<T> a, T b) {
+    return {a.x - b, a.y - b, a.z - b, a.w - b};
+}
+
+template <typename T>
+inline vec4<T> operator-(T a, vec4<T> b) {
+    return {a - b.x, a - b.y, a - b.z, a - b.w};
 }
 
 template <typename T>

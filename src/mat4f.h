@@ -100,7 +100,7 @@ inline vec4f operator*(const mat4f& a, vec4f v) {
     __m128 prod3 = _mm_mul_ps(a.simd[2], v.simd);
     __m128 prod4 = _mm_mul_ps(a.simd[3], v.simd);
 
-    return vec4f::from_simd(
+    return vec4f::fromSimd(
             _mm_hadd_ps(_mm_hadd_ps(prod1, prod2), _mm_hadd_ps(prod3, prod4))
     );
 }

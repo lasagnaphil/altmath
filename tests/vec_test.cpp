@@ -10,9 +10,13 @@
 #include "vec4f.h"
 #include "vec2d.h"
 #include "vec4d.h"
+#include "vec4i.h"
 
 #include "vec2dx4.h"
 #include "vec3dx4.h"
+
+#include "math_utils.h"
+#include "vec_utils.h"
 
 TEST_CASE("vec2f works", "[vec2f]") {
     SECTION("Is POD") {
@@ -207,6 +211,42 @@ TEST_CASE("vec4d works", "[vec4d]") {
         REQUIRE(cross.x == -4.0);
         REQUIRE(cross.y == 8.0);
         REQUIRE(cross.z == -4.0);
+    }
+}
+
+TEST_CASE("vec4i works", "[vec4i]") {
+    SECTION("Is POD") {
+        REQUIRE(std::is_pod<vec4i>());
+    }
+    SECTION("Arithmetic") {
+        vec4i a {1, 2, 3, 4};
+        vec4i b {5, 6, 7, 8};
+        REQUIRE(a + b == vec4i {6, 8, 10, 12});
+        REQUIRE(a - b == vec4i {-4, -4, -4, -4});
+        REQUIRE(a * b == vec4i {5, 12, 21, 32});
+        REQUIRE(a * 2 == vec4i {2, 4, 6, 8});
+        REQUIRE(2 * a == vec4i {2, 4, 6, 8});
+
+        vec4f c = aml::toFloat(a) * 0.5f;
+        REQUIRE(aml::toInt(aml::floor(c)) == vec4i {0, 1, 1, 2});
+        a += b;
+        REQUIRE(a == vec4i {6, 8, 10, 12});
+        a -= b;
+        REQUIRE(a == vec4i {1, 2, 3, 4});
+        a *= b;
+        REQUIRE(a == vec4i {5, 12, 21, 32});
+        a *= 2;
+        REQUIRE(a == vec4i {10, 24, 42, 64});
+    }
+    SECTION("Utility") {
+        vec4i a {1, 2, 3, 4};
+        vec4i b {5, 6, 7, 8};
+        REQUIRE(aml::normsq(a) == 30);
+
+        vec4i cross = aml::cross(a, b);
+        REQUIRE(cross.x == -4);
+        REQUIRE(cross.y == 8);
+        REQUIRE(cross.z == -4);
     }
 }
 

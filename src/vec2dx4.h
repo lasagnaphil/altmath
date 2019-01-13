@@ -5,7 +5,7 @@
 #ifndef ALTMATH_VEC2DX4_H
 #define ALTMATH_VEC2DX4_H
 
-#include "vec2.h"
+#include "vec2d.h"
 #include "vec4d.h"
 
 using vec2dx4 = vec2<vec4d>;
@@ -14,11 +14,12 @@ template <>
 struct vec2<vec4d> {
     vec4d x, y;
 
-    static vec2<vec4d> load(const double* x, const double* y) {
-        return {
-            vec4d::load(x),
-            vec4d::load(y)
-        };
+    inline static vec2<vec4d> load(const double* x, const double* y) {
+        return {vec4d::load(x), vec4d::load(y)};
+    }
+
+    inline static vec2<vec4d> loadAligned(const double* x, const double* y) {
+        return {vec4d::loadAligned(x), vec4d::loadAligned(y)};
     }
 
     inline static vec2<vec4d> load(vec2d* v) {
@@ -29,8 +30,8 @@ struct vec2<vec4d> {
     }
 
     void store(double* vx, double* vy) {
-        x.store(vx);
-        y.store(vy);
+        x.storeAligned(vx);
+        y.storeAligned(vy);
     }
 };
 

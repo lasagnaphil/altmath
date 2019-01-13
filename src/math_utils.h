@@ -12,10 +12,25 @@
 #include "math.h"
 
 namespace aml {
-template<typename T>
-inline T sqrt(T x) {
-    return ::sqrt(x);
-}
+    template <typename T>
+    inline T max(T a, T b) {
+        return (a > b)? a : b;
+    }
+
+    template <typename T>
+    inline T min(T a, T b) {
+        return (a < b)? a : b;
+    }
+
+    template <typename T>
+    inline T sqrt(T x) {
+        return ::sqrt(x);
+    }
+
+    template <typename T>
+    inline T floor(T x) {
+        return ::floor(x);
+    }
 }
 
 #include "vec2.h"
@@ -23,16 +38,6 @@ inline T sqrt(T x) {
 #include "vec4.h"
 
 namespace aml {
-
-template <typename T>
-inline T max(T a, T b) {
-    return (a > b)? a : b;
-}
-
-template <typename T>
-inline T min(T a, T b) {
-    return (a < b)? a : b;
-}
 
 template <typename T>
 inline T clamp(T value, T lower, T upper) {

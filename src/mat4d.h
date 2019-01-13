@@ -16,7 +16,7 @@ struct mat4<double> {
         __m256d simd[4];
     };
 
-    static mat4d from_simd(__m256d simd0, __m256d simd1, __m256d simd2, __m256d simd3) {
+    static mat4d fromSimd(__m256d simd0, __m256d simd1, __m256d simd2, __m256d simd3) {
         mat4d mat;
         mat.simd[0] = simd0;
         mat.simd[1] = simd1;
@@ -50,7 +50,7 @@ inline mat4d operator+(const mat4d& a, const mat4d& b) {
     __m256d v2 = _mm256_add_pd(a.simd[1], b.simd[1]);
     __m256d v3 = _mm256_add_pd(a.simd[2], b.simd[2]);
     __m256d v4 = _mm256_add_pd(a.simd[3], b.simd[3]);
-    return mat4d::from_simd(v1, v2, v3, v4);
+    return mat4d::fromSimd(v1, v2, v3, v4);
 }
 
 inline mat4d operator-(const mat4d& a, const mat4d& b) {
@@ -58,7 +58,7 @@ inline mat4d operator-(const mat4d& a, const mat4d& b) {
     __m256d v2 = _mm256_sub_pd(a.simd[1], b.simd[1]);
     __m256d v3 = _mm256_sub_pd(a.simd[2], b.simd[2]);
     __m256d v4 = _mm256_sub_pd(a.simd[3], b.simd[3]);
-    return mat4d::from_simd(v1, v2, v3, v4);
+    return mat4d::fromSimd(v1, v2, v3, v4);
 }
 
 inline mat4d operator*(const mat4d& a, const mat4d& b) {
@@ -94,7 +94,7 @@ inline vec4d operator*(const mat4d& a, vec4d v) {
     __m256d swapped = _mm256_permute2f128_pd(temp1, temp2, 0x21);
     __m256d blended = _mm256_blend_pd(temp1, temp2, 0b1100);
 
-    return vec4d::from_simd(_mm256_add_pd(swapped, blended));
+    return vec4d::fromSimd(_mm256_add_pd(swapped, blended));
 }
 
 inline mat4d operator*(const mat4d& a, double k) {
@@ -103,7 +103,7 @@ inline mat4d operator*(const mat4d& a, double k) {
     __m256d v2 = _mm256_mul_pd(ksimd, a.simd[1]);
     __m256d v3 = _mm256_mul_pd(ksimd, a.simd[2]);
     __m256d v4 = _mm256_mul_pd(ksimd, a.simd[3]);
-    return mat4d::from_simd(v1, v2, v3, v4);
+    return mat4d::fromSimd(v1, v2, v3, v4);
 }
 
 inline mat4d operator*(double k, const mat4d& a) {
@@ -112,7 +112,7 @@ inline mat4d operator*(double k, const mat4d& a) {
     __m256d v2 = _mm256_mul_pd(ksimd, a.simd[1]);
     __m256d v3 = _mm256_mul_pd(ksimd, a.simd[2]);
     __m256d v4 = _mm256_mul_pd(ksimd, a.simd[3]);
-    return mat4d::from_simd(v1, v2, v3, v4);
+    return mat4d::fromSimd(v1, v2, v3, v4);
 }
 
 #endif //ALTMATH_MAT4D_H

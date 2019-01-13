@@ -12,15 +12,18 @@
 template <>
 struct vec2<double> {
     union {
-        struct {
-            double x; double y;
-        };
+        struct { double x; double y; };
+        double v[2];
         __m128d simd;
     };
 
-    static inline vec2<double> load(const double* v) {
+    static inline vec2<double> make(double v) {
+        return from_simd(_mm_set1_pd(v));
+    }
+
+    static inline vec2<double> load(const double* in) {
         vec2<double> res;
-        res.simd = _mm_load_pd(v);
+        res.simd = _mm_load_pd(in);
         return res;
     }
 
@@ -30,8 +33,12 @@ struct vec2<double> {
         return res;
     }
 
-    void store(double* v) {
-        _mm_store_pd(v, simd);
+    void store(double *out) {
+        _mm_storeu_pd(out, simd);
+    }
+
+    void storeAligned(double *out) {
+        _mm_store_pd(out, simd);
     }
 };
 
@@ -116,6 +123,11 @@ namespace aml {
     template <>
     inline vec2d sqrt(vec2d a) {
         return vec2d::from_simd(_mm_sqrt_pd(a.simd));
+    }
+
+    template <>
+    inline vec2d floor(vec2d a) {
+        return vec2d::from_simd(_mm_floor_pd(a.simd));
     }
 
     template <>
