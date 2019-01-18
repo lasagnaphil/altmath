@@ -123,7 +123,7 @@ namespace aml {
     }
 
     inline vec2i toInt(vec2d v) {
-        int x = _mm_cvtsi128_si32(v.simd);
+        int x = _mm_cvtsi128_si32((__m128i) v.simd);
         int y = _mm_extract_epi32(v.simd, 1);
         return vec2i {x, y};
     }
