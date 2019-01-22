@@ -11,9 +11,10 @@ target_include_directories(altmath INTERFACE ${PROJECT_INCLUDE_DIR})
 target_compile_options(altmath INTERFACE -msse -msse2 -msse3 -mavx -mfma)
 
 if (altmath_build_tests)
-    set(DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/doctest)
+    set(ALTMATH_DOCTEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/doctest)
     add_library(altmath-doctest INTERFACE)
-    target_include_directories(altmath-doctest INTERFACE ${DOCTEST_DIR})
+    target_compile_definitions(altmath-doctest INTERFACE TLS_NO_DEBUG)
+    target_include_directories(altmath-doctest INTERFACE ${ALTMATH_DOCTEST_DIR})
 
     set(TEST_DIR ${CMAKE_CURRENT_SOURCE_DIR}/tests)
     file(GLOB_RECURSE TEST_SOURCES ${TEST_DIR}/*.cpp)
