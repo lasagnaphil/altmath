@@ -175,6 +175,13 @@ namespace aml {
     inline float norm(vec4f v) {
         return sqrtf(normsq(v));
     }
+
+    inline float elemWiseSum(vec4f v) {
+        vec4f res;
+        res.simd = _mm_hadd_ps(v.simd, v.simd);
+        res.simd = _mm_hadd_ps(res.simd, res.simd);
+        return res.x;
+    }
 }
 
 #endif //ALTMATH_VEC4F_H

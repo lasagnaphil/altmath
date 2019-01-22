@@ -10,14 +10,16 @@
 // Later I would try writing an AVX version.
 // Useful link: https://stackoverflow.com/questions/18499971/efficient-4x4-matrix-multiplication-c-vs-assembly
 
+#include "simd.h"
 #include "mat4.h"
+#include "mat2f.h"
 #include "vec4f.h"
-#include <immintrin.h>
 
 template <>
 struct mat4<float> {
     union {
-        float data[16];
+        float p[16];
+        float m[4][4];
         __m128 simd[4];
     };
 
@@ -31,16 +33,17 @@ struct mat4<float> {
     }
 
     inline float& operator[](int i) {
-        return data[i];
+        return p[i];
     }
 
     inline const float& operator[](int i) const {
-        return data[i];
+        return p[i];
     }
 };
 
 using mat4f = mat4<float>;
 
+template <>
 inline bool operator==(const mat4f& a, const mat4f& b) {
     return _mm_movemask_ps(_mm_cmpeq_ps(a.simd[0], b.simd[0])) == 0xf &&
            _mm_movemask_ps(_mm_cmpeq_ps(a.simd[1], b.simd[1])) == 0xf &&
@@ -48,10 +51,12 @@ inline bool operator==(const mat4f& a, const mat4f& b) {
            _mm_movemask_ps(_mm_cmpeq_ps(a.simd[3], b.simd[3])) == 0xf;
 }
 
+template <>
 inline bool operator!=(const mat4f& a, const mat4f& b) {
     return !(a == b);
 }
 
+template <>
 inline mat4f operator+(const mat4f& a, const mat4f& b) {
     __m128 v1 = _mm_add_ps(a.simd[0], b.simd[0]);
     __m128 v2 = _mm_add_ps(a.simd[1], b.simd[1]);
@@ -60,6 +65,7 @@ inline mat4f operator+(const mat4f& a, const mat4f& b) {
     return mat4f::from_simd(v1, v2, v3, v4);
 }
 
+template <>
 inline mat4f operator-(const mat4f& a, const mat4f& b) {
     __m128 v1 = _mm_sub_ps(a.simd[0], b.simd[0]);
     __m128 v2 = _mm_sub_ps(a.simd[1], b.simd[1]);
@@ -68,6 +74,7 @@ inline mat4f operator-(const mat4f& a, const mat4f& b) {
     return mat4f::from_simd(v1, v2, v3, v4);
 }
 
+template <>
 inline mat4f operator*(const mat4f& a, const mat4f& b) {
     mat4f res;
     __m128 row1 = b.simd[0];
@@ -94,6 +101,7 @@ inline mat4f operator*(const mat4f& a, const mat4f& b) {
     return res;
 }
 
+template <>
 inline vec4f operator*(const mat4f& a, vec4f v) {
     __m128 prod1 = _mm_mul_ps(a.simd[0], v.simd);
     __m128 prod2 = _mm_mul_ps(a.simd[1], v.simd);
@@ -105,6 +113,7 @@ inline vec4f operator*(const mat4f& a, vec4f v) {
     );
 }
 
+template <>
 inline mat4f operator*(const mat4f& a, float k) {
     __m128 ksimd = _mm_load1_ps(&k);
     __m128 v1 = _mm_mul_ps(ksimd, a.simd[0]);
@@ -114,6 +123,7 @@ inline mat4f operator*(const mat4f& a, float k) {
     return mat4f::from_simd(v1, v2, v3, v4);
 }
 
+template <>
 inline mat4f operator*(float k, const mat4f& a) {
     __m128 ksimd = _mm_load1_ps(&k);
     __m128 v1 = _mm_mul_ps(ksimd, a.simd[0]);
@@ -121,6 +131,87 @@ inline mat4f operator*(float k, const mat4f& a) {
     __m128 v3 = _mm_mul_ps(ksimd, a.simd[2]);
     __m128 v4 = _mm_mul_ps(ksimd, a.simd[3]);
     return mat4f::from_simd(v1, v2, v3, v4);
+}
+
+template <>
+inline mat4f& operator+=(mat4f& a, const mat4f& b) {
+    return a = a + b;
+}
+
+template <>
+inline mat4f& operator-=(mat4f& a, const mat4f& b) {
+    return a = a - b;
+}
+
+template <>
+inline mat4f& operator*=(mat4f& a, const mat4f& b) {
+    return a = a * b;
+}
+
+template <>
+inline mat4f& operator*=(mat4f& a, float k) {
+    return a = a * k;
+}
+
+namespace aml {
+    // Courtesy of https://lxjk.github.io/2017/09/03/Fast-4x4-Matrix-Inverse-with-SSE-SIMD-Explained.html
+    inline float det(const mat4f& m) {
+        mat2f A = mat2f::fromSimd(_mm_movelh_ps(m.simd[0], m.simd[1]));
+        mat2f B = mat2f::fromSimd(_mm_movehl_ps(m.simd[1], m.simd[0]));
+        mat2f C = mat2f::fromSimd(_mm_movelh_ps(m.simd[2], m.simd[3]));
+        mat2f D = mat2f::fromSimd(_mm_movehl_ps(m.simd[3], m.simd[2]));
+
+        float detA = det(A);
+        float detB = det(B);
+        float detC = det(C);
+        float detD = det(D);
+
+        // tr = tr((A#B)(D#C))
+        mat2f D_C = adjMul(D, C);
+        mat2f A_B = adjMul(A, B);
+        vec4f diag = vec4f::fromSimd(_mm_mul_ps(A_B.simd, VecSwizzle(D_C.simd, 0,2,1,3)));
+        float tr = elemWiseSum(diag);
+
+        return detA * detD + detB * detC - tr;
+    }
+
+    inline mat4f inv(const mat4f& m) {
+        mat2f A = mat2f::fromSimd(_mm_movelh_ps(m.simd[0], m.simd[1]));
+        mat2f B = mat2f::fromSimd(_mm_movehl_ps(m.simd[1], m.simd[0]));
+        mat2f C = mat2f::fromSimd(_mm_movelh_ps(m.simd[2], m.simd[3]));
+        mat2f D = mat2f::fromSimd(_mm_movehl_ps(m.simd[3], m.simd[2]));
+
+        float detA = det(A);
+        float detB = det(B);
+        float detC = det(C);
+        float detD = det(D);
+
+        mat2f D_C = adjMul(D, C);
+        mat2f A_B = adjMul(A, B);
+        mat2f X_ = detD * A - B * D_C;
+        mat2f W_ = detA * D - C * A_B;
+        mat2f Y_ = detB * C - mulAdj(D, A_B);
+        mat2f Z_ = detC * B - mulAdj(A, D_C);
+        // tr = tr((A#B)(D#C))
+        vec4f diag = vec4f::fromSimd(_mm_mul_ps(A_B.simd, VecSwizzle(D_C.simd, 0,2,1,3)));
+        float tr = elemWiseSum(diag);
+        float detM = detA * detD + detB * detC - tr;
+        mat2f adjSignMask = mat2f::make(1.f, -1.f, -1.f, 1.f);
+        mat2f rDetM = adjSignMask / detM;
+
+        X_ *= rDetM;
+        Y_ *= rDetM;
+        Z_ *= rDetM;
+        W_ *= rDetM;
+
+        mat4f r;
+        r.simd[0] = VecShuffle(X_.simd, Y_.simd, 3,1,3,1);
+        r.simd[1] = VecShuffle(X_.simd, Y_.simd, 2,0,2,0);
+        r.simd[2] = VecShuffle(Z_.simd, W_.simd, 3,1,3,1);
+        r.simd[3] = VecShuffle(Z_.simd, W_.simd, 2,0,2,0);
+
+        return r;
+    }
 }
 
 #endif //ALTMATH_MAT4F_H

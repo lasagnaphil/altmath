@@ -4,10 +4,17 @@
 
 #include <catch.hpp>
 
+#include "mat2f.h"
 #include "mat4f.h"
 #include "mat4d.h"
 #include "vec4f.h"
 #include "vec4d.h"
+
+TEST_CASE("mat2f works", "[mat2f]") {
+    SECTION("Is POD") {
+        REQUIRE(std::is_pod<mat2f>());
+    }
+}
 
 TEST_CASE("mat4f works", "[mat4f]") {
     SECTION("Is POD") {
@@ -43,6 +50,25 @@ TEST_CASE("mat4f works", "[mat4f]") {
                                 248.f, 286.f, 324.f, 362.f,
                                 344.f, 398.f, 452.f, 506.f});
         REQUIRE(a * v == vec4f {20.f, 60.f, 100.f, 140.f});
+    }
+    SECTION("Determinant and inverse") {
+        mat4f a = {1.f, 3.f, 5.f, 9.f,
+                   1.f, 3.f, 1.f, 7.f,
+                   4.f, 3.f, 9.f, 7.f,
+                   5.f, 2.f, 0.f, 9.f};
+
+        REQUIRE(aml::det(a) == -376.f);
+
+        mat4f ainv = {104.f, -16.f, -56.f, -48.f,
+                      235.f, -329.f, -94.f, 94.f,
+                      -39.f, 53.f, -26.f, 18.f,
+                      -110.f, 82.f, 52.f, -36.f};
+        ainv *= (-1.f / 376.f);
+
+        a = aml::inv(a);
+        for (int i = 0; i < 16; i++) {
+            REQUIRE(a.p[i] == Approx(ainv.p[i]));
+        }
     }
 }
 

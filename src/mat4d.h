@@ -12,7 +12,7 @@
 template <>
 struct mat4<double> {
     union {
-        double data[16];
+        double p[16];
         __m256d simd[4];
     };
 
@@ -26,14 +26,15 @@ struct mat4<double> {
     }
 
     inline double& operator[](int i) {
-        return data[i];
+        return p[i];
     }
 
     inline const double& operator[](int i) const {
-        return data[i];
+        return p[i];
     }
 };
 
+template <>
 inline bool operator==(const mat4d& a, const mat4d& b) {
     return _mm256_movemask_pd(_mm256_cmp_pd(a.simd[0], b.simd[0], _CMP_EQ_OQ)) == 0xf &&
            _mm256_movemask_pd(_mm256_cmp_pd(a.simd[1], b.simd[1], _CMP_EQ_OQ)) == 0xf &&
@@ -41,10 +42,12 @@ inline bool operator==(const mat4d& a, const mat4d& b) {
            _mm256_movemask_pd(_mm256_cmp_pd(a.simd[3], b.simd[3], _CMP_EQ_OQ)) == 0xf;
 }
 
+template <>
 inline bool operator!=(const mat4d& a, const mat4d& b) {
     return !(a == b);
 }
 
+template <>
 inline mat4d operator+(const mat4d& a, const mat4d& b) {
     __m256d v1 = _mm256_add_pd(a.simd[0], b.simd[0]);
     __m256d v2 = _mm256_add_pd(a.simd[1], b.simd[1]);
@@ -53,6 +56,7 @@ inline mat4d operator+(const mat4d& a, const mat4d& b) {
     return mat4d::fromSimd(v1, v2, v3, v4);
 }
 
+template <>
 inline mat4d operator-(const mat4d& a, const mat4d& b) {
     __m256d v1 = _mm256_sub_pd(a.simd[0], b.simd[0]);
     __m256d v2 = _mm256_sub_pd(a.simd[1], b.simd[1]);
@@ -61,6 +65,7 @@ inline mat4d operator-(const mat4d& a, const mat4d& b) {
     return mat4d::fromSimd(v1, v2, v3, v4);
 }
 
+template <>
 inline mat4d operator*(const mat4d& a, const mat4d& b) {
     mat4d res;
     __m256d row1 = b.simd[0];
@@ -83,6 +88,7 @@ inline mat4d operator*(const mat4d& a, const mat4d& b) {
 
 // Kudos to https://stackoverflow.com/questions/10454150/intel-avx-256-bits-version-of-dot-product-for-double-precision-floating-point-v
 
+template <>
 inline vec4d operator*(const mat4d& a, vec4d v) {
     __m256d prod1 = _mm256_mul_pd(a.simd[0], v.simd);
     __m256d prod2 = _mm256_mul_pd(a.simd[1], v.simd);
@@ -97,6 +103,7 @@ inline vec4d operator*(const mat4d& a, vec4d v) {
     return vec4d::fromSimd(_mm256_add_pd(swapped, blended));
 }
 
+template <>
 inline mat4d operator*(const mat4d& a, double k) {
     __m256d ksimd = _mm256_broadcast_sd(&k);
     __m256d v1 = _mm256_mul_pd(ksimd, a.simd[0]);
@@ -106,6 +113,7 @@ inline mat4d operator*(const mat4d& a, double k) {
     return mat4d::fromSimd(v1, v2, v3, v4);
 }
 
+template <>
 inline mat4d operator*(double k, const mat4d& a) {
     __m256d ksimd = _mm256_broadcast_sd(&k);
     __m256d v1 = _mm256_mul_pd(ksimd, a.simd[0]);
@@ -113,6 +121,26 @@ inline mat4d operator*(double k, const mat4d& a) {
     __m256d v3 = _mm256_mul_pd(ksimd, a.simd[2]);
     __m256d v4 = _mm256_mul_pd(ksimd, a.simd[3]);
     return mat4d::fromSimd(v1, v2, v3, v4);
+}
+
+template <>
+inline mat4d& operator+=(mat4d& a, const mat4d& b) {
+    return a = a + b;
+}
+
+template <>
+inline mat4d& operator-=(mat4d& a, const mat4d& b) {
+    return a = a - b;
+}
+
+template <>
+inline mat4d& operator*=(mat4d& a, const mat4d& b) {
+    return a = a * b;
+}
+
+template <>
+inline mat4d& operator*=(mat4d& a, double k) {
+    return a = a * k;
 }
 
 #endif //ALTMATH_MAT4D_H
