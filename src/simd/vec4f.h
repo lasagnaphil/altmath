@@ -5,6 +5,8 @@
 #ifndef ALTMATH_VEC4F_H
 #define ALTMATH_VEC4F_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "vec4.h"
 #include "math_utils.h"
 #include <immintrin.h>
@@ -141,18 +143,15 @@ inline bool operator!=(vec4f a, vec4f b) {
 }
 
 namespace aml {
-    template <>
     inline vec4f sqrt(vec4f a) {
         return vec4f::fromSimd(_mm_sqrt_ps(a.simd));
     }
 
-    template <>
     inline vec4f floor(vec4f a) {
         return vec4f::fromSimd(_mm_floor_ps(a.simd));
     }
 
     // FROM: https://stackoverflow.com/questions/6996764/fastest-way-to-do-horizontal-float-vector-sum-on-x86
-    template <>
     inline float dot(vec4f a, vec4f b) {
         __m128 m = _mm_mul_ps(a.simd, b.simd);
         __m128 shuf = _mm_movehdup_ps(m);        // broadcast elements 3,1 to 2,0
@@ -162,7 +161,6 @@ namespace aml {
         return        _mm_cvtss_f32(sums);
     }
 
-    template <>
     inline vec4f cross(vec4f a, vec4f b) {
         __m128 a1 = _mm_shuffle_ps(a.simd, a.simd, _MM_SHUFFLE(3, 0, 2, 1));
         __m128 a2 = _mm_shuffle_ps(a.simd, a.simd, _MM_SHUFFLE(3, 1, 0, 2));
@@ -171,7 +169,6 @@ namespace aml {
         return vec4f::fromSimd(_mm_sub_ps(_mm_mul_ps(a1, b1), _mm_mul_ps(a2, b2)));
     }
 
-    template <>
     inline float norm(vec4f v) {
         return sqrtf(normsq(v));
     }
@@ -184,4 +181,5 @@ namespace aml {
     }
 }
 
+#endif
 #endif //ALTMATH_VEC4F_H

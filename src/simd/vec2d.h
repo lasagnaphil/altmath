@@ -5,6 +5,8 @@
 #ifndef ALTMATH_VEC2D_H
 #define ALTMATH_VEC2D_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "vec2.h"
 #include "math_utils.h"
 #include <immintrin.h>
@@ -120,17 +122,14 @@ inline bool operator!=(vec2d a, vec2d b) {
 }
 
 namespace aml {
-    template <>
     inline vec2d sqrt(vec2d a) {
         return vec2d::from_simd(_mm_sqrt_pd(a.simd));
     }
 
-    template <>
     inline vec2d floor(vec2d a) {
         return vec2d::from_simd(_mm_floor_pd(a.simd));
     }
 
-    template <>
     inline double dot(vec2d a, vec2d b) {
         vec2d m;
         m.simd = _mm_mul_pd(a.simd, b.simd);
@@ -139,9 +138,10 @@ namespace aml {
 
     template <>
     inline double norm(vec2d v) {
-        return sqrt(normsq(v));
+        return ::sqrt(normsq(v));
     }
 
 }
 
+#endif
 #endif //ALTMATH_VEC2D_H

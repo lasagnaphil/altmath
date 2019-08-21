@@ -5,6 +5,8 @@
 #ifndef COLDETECT_MAT2F_H
 #define COLDETECT_MAT2F_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "mat2.h"
 #include "simd.h"
 
@@ -149,4 +151,5 @@ namespace aml {
     }
 }
 
+#endif
 #endif //COLDETECT_MAT2F_H

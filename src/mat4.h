@@ -71,10 +71,10 @@ inline mat4<T> operator*(const mat4<T>& a, const mat4<T>& b) {
 
 template <typename T>
 inline vec4<T> operator*(const mat4<T>& a, vec4<T> v) {
-    mat4<T> c = {};
+    vec4<T> c = {};
     for (int i = 0; i < 4; i++) {
         for (int k = 0; k < 4; k++) {
-            c.m[i] += a.m[i][k] * v[k];
+            c.v[i] += a.m[i][k] * v.v[k];
         }
     }
     return c;
@@ -128,6 +128,175 @@ inline mat4<T>& operator*=(mat4<T>& a, T k) {
 }
 
 namespace aml {
+
+    template <typename T>
+    inline float det(const mat4<T>& m) {
+        float inv[4];
+        inv[0] = m.p[5]  * m.p[10] * m.p[15] -
+                 m.p[5]  * m.p[11] * m.p[14] -
+                 m.p[9]  * m.p[6]  * m.p[15] +
+                 m.p[9]  * m.p[7]  * m.p[14] +
+                 m.p[13] * m.p[6]  * m.p[11] -
+                 m.p[13] * m.p[7]  * m.p[10];
+
+        inv[1] = -m.p[4]  * m.p[10] * m.p[15] +
+                 m.p[4]  * m.p[11] * m.p[14] +
+                 m.p[8]  * m.p[6]  * m.p[15] -
+                 m.p[8]  * m.p[7]  * m.p[14] -
+                 m.p[12] * m.p[6]  * m.p[11] +
+                 m.p[12] * m.p[7]  * m.p[10];
+
+        inv[2] = m.p[4]  * m.p[9] * m.p[15] -
+                 m.p[4]  * m.p[11] * m.p[13] -
+                 m.p[8]  * m.p[5] * m.p[15] +
+                 m.p[8]  * m.p[7] * m.p[13] +
+                 m.p[12] * m.p[5] * m.p[11] -
+                 m.p[12] * m.p[7] * m.p[9];
+
+        inv[3] = -m.p[4]  * m.p[9] * m.p[14] +
+                  m.p[4]  * m.p[10] * m.p[13] +
+                  m.p[8]  * m.p[5] * m.p[14] -
+                  m.p[8]  * m.p[6] * m.p[13] -
+                  m.p[12] * m.p[5] * m.p[10] +
+                  m.p[12] * m.p[6] * m.p[9];
+
+        return m.p[0] * inv[0] + m.p[1] * inv[1] + m.p[2] * inv[2] + m.p[3] * inv[3];
+    }
+
+    template <typename T>
+    inline bool inv(const mat4<T>& m, mat4<T>& out) {
+        double inv[16], det;
+        int i;
+
+        inv[0] = m.p[5]  * m.p[10] * m.p[15] -
+                 m.p[5]  * m.p[11] * m.p[14] -
+                 m.p[9]  * m.p[6]  * m.p[15] +
+                 m.p[9]  * m.p[7]  * m.p[14] +
+                 m.p[13] * m.p[6]  * m.p[11] -
+                 m.p[13] * m.p[7]  * m.p[10];
+
+        inv[4] = -m.p[4]  * m.p[10] * m.p[15] +
+                 m.p[4]  * m.p[11] * m.p[14] +
+                 m.p[8]  * m.p[6]  * m.p[15] -
+                 m.p[8]  * m.p[7]  * m.p[14] -
+                 m.p[12] * m.p[6]  * m.p[11] +
+                 m.p[12] * m.p[7]  * m.p[10];
+
+        inv[8] = m.p[4]  * m.p[9] * m.p[15] -
+                 m.p[4]  * m.p[11] * m.p[13] -
+                 m.p[8]  * m.p[5] * m.p[15] +
+                 m.p[8]  * m.p[7] * m.p[13] +
+                 m.p[12] * m.p[5] * m.p[11] -
+                 m.p[12] * m.p[7] * m.p[9];
+
+        inv[12] = -m.p[4]  * m.p[9] * m.p[14] +
+                  m.p[4]  * m.p[10] * m.p[13] +
+                  m.p[8]  * m.p[5] * m.p[14] -
+                  m.p[8]  * m.p[6] * m.p[13] -
+                  m.p[12] * m.p[5] * m.p[10] +
+                  m.p[12] * m.p[6] * m.p[9];
+
+        inv[1] = -m.p[1]  * m.p[10] * m.p[15] +
+                 m.p[1]  * m.p[11] * m.p[14] +
+                 m.p[9]  * m.p[2] * m.p[15] -
+                 m.p[9]  * m.p[3] * m.p[14] -
+                 m.p[13] * m.p[2] * m.p[11] +
+                 m.p[13] * m.p[3] * m.p[10];
+
+        inv[5] = m.p[0]  * m.p[10] * m.p[15] -
+                 m.p[0]  * m.p[11] * m.p[14] -
+                 m.p[8]  * m.p[2] * m.p[15] +
+                 m.p[8]  * m.p[3] * m.p[14] +
+                 m.p[12] * m.p[2] * m.p[11] -
+                 m.p[12] * m.p[3] * m.p[10];
+
+        inv[9] = -m.p[0]  * m.p[9] * m.p[15] +
+                 m.p[0]  * m.p[11] * m.p[13] +
+                 m.p[8]  * m.p[1] * m.p[15] -
+                 m.p[8]  * m.p[3] * m.p[13] -
+                 m.p[12] * m.p[1] * m.p[11] +
+                 m.p[12] * m.p[3] * m.p[9];
+
+        inv[13] = m.p[0]  * m.p[9] * m.p[14] -
+                  m.p[0]  * m.p[10] * m.p[13] -
+                  m.p[8]  * m.p[1] * m.p[14] +
+                  m.p[8]  * m.p[2] * m.p[13] +
+                  m.p[12] * m.p[1] * m.p[10] -
+                  m.p[12] * m.p[2] * m.p[9];
+
+        inv[2] = m.p[1]  * m.p[6] * m.p[15] -
+                 m.p[1]  * m.p[7] * m.p[14] -
+                 m.p[5]  * m.p[2] * m.p[15] +
+                 m.p[5]  * m.p[3] * m.p[14] +
+                 m.p[13] * m.p[2] * m.p[7] -
+                 m.p[13] * m.p[3] * m.p[6];
+
+        inv[6] = -m.p[0]  * m.p[6] * m.p[15] +
+                 m.p[0]  * m.p[7] * m.p[14] +
+                 m.p[4]  * m.p[2] * m.p[15] -
+                 m.p[4]  * m.p[3] * m.p[14] -
+                 m.p[12] * m.p[2] * m.p[7] +
+                 m.p[12] * m.p[3] * m.p[6];
+
+        inv[10] = m.p[0]  * m.p[5] * m.p[15] -
+                  m.p[0]  * m.p[7] * m.p[13] -
+                  m.p[4]  * m.p[1] * m.p[15] +
+                  m.p[4]  * m.p[3] * m.p[13] +
+                  m.p[12] * m.p[1] * m.p[7] -
+                  m.p[12] * m.p[3] * m.p[5];
+
+        inv[14] = -m.p[0]  * m.p[5] * m.p[14] +
+                  m.p[0]  * m.p[6] * m.p[13] +
+                  m.p[4]  * m.p[1] * m.p[14] -
+                  m.p[4]  * m.p[2] * m.p[13] -
+                  m.p[12] * m.p[1] * m.p[6] +
+                  m.p[12] * m.p[2] * m.p[5];
+
+        inv[3] = -m.p[1] * m.p[6] * m.p[11] +
+                 m.p[1] * m.p[7] * m.p[10] +
+                 m.p[5] * m.p[2] * m.p[11] -
+                 m.p[5] * m.p[3] * m.p[10] -
+                 m.p[9] * m.p[2] * m.p[7] +
+                 m.p[9] * m.p[3] * m.p[6];
+
+        inv[7] = m.p[0] * m.p[6] * m.p[11] -
+                 m.p[0] * m.p[7] * m.p[10] -
+                 m.p[4] * m.p[2] * m.p[11] +
+                 m.p[4] * m.p[3] * m.p[10] +
+                 m.p[8] * m.p[2] * m.p[7] -
+                 m.p[8] * m.p[3] * m.p[6];
+
+        inv[11] = -m.p[0] * m.p[5] * m.p[11] +
+                  m.p[0] * m.p[7] * m.p[9] +
+                  m.p[4] * m.p[1] * m.p[11] -
+                  m.p[4] * m.p[3] * m.p[9] -
+                  m.p[8] * m.p[1] * m.p[7] +
+                  m.p[8] * m.p[3] * m.p[5];
+
+        inv[15] = m.p[0] * m.p[5] * m.p[10] -
+                  m.p[0] * m.p[6] * m.p[9] -
+                  m.p[4] * m.p[1] * m.p[10] +
+                  m.p[4] * m.p[2] * m.p[9] +
+                  m.p[8] * m.p[1] * m.p[6] -
+                  m.p[8] * m.p[2] * m.p[5];
+
+        det = m.p[0] * inv[0] + m.p[1] * inv[4] + m.p[2] * inv[8] + m.p[3] * inv[12];
+
+        if (det == 0)
+            return false;
+
+        det = 1.0 / det;
+
+        for (i = 0; i < 16; i++)
+            out.p[i] = inv[i] * det;
+
+        return true;
+    }
 }
+
+#ifdef ALTMATH_USE_SIMD
+#include "simd/mat4f.h"
+#include "simd/mat4d.h"
+#endif
 
 #endif //ALTMATH_MAT4_H

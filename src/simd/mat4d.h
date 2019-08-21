@@ -5,6 +5,8 @@
 #ifndef ALTMATH_MAT4D_H
 #define ALTMATH_MAT4D_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "mat4.h"
 #include "vec4d.h"
 #include <immintrin.h>
@@ -143,4 +145,5 @@ inline mat4d& operator*=(mat4d& a, double k) {
     return a = a * k;
 }
 
+#endif
 #endif //ALTMATH_MAT4D_H

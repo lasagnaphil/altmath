@@ -5,6 +5,8 @@
 #ifndef ALTMATH_VEC4D_H
 #define ALTMATH_VEC4D_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "vec4.h"
 #include "math_utils.h"
 #include <immintrin.h>
@@ -144,26 +146,22 @@ inline bool operator!=(vec4d a, vec4d b) {
 }
 
 namespace aml {
-    template <>
     inline vec4d sqrt(vec4d a) {
         return vec4d::fromSimd(_mm256_sqrt_pd(a.simd));
     }
 
-    template <>
     inline vec4d floor(vec4d a) {
         return vec4d::fromSimd(_mm256_floor_pd(a.simd));
     }
 
-    template <>
     inline vec4d max(vec4d a, vec4d b) {
         return vec4d::fromSimd(_mm256_max_pd(a.simd, b.simd));
     }
 
-    template <>
     inline vec4d min(vec4d a, vec4d b) {
         return vec4d::fromSimd(_mm256_min_pd(a.simd, b.simd));
     }
-    template <>
+
     inline double dot(vec4d a, vec4d b) {
         __m256d m = _mm256_mul_pd(a.simd, b.simd);
         __m256d temp = _mm256_hadd_pd(m, m);
@@ -174,4 +172,5 @@ namespace aml {
     }
 }
 
+#endif
 #endif //ALTMATH_VEC4D_H

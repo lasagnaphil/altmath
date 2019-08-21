@@ -9,14 +9,29 @@
 #include "vec2.h"
 #include "vec3.h"
 #include "vec4.h"
-#include "vec2d.h"
-#include "vec4f.h"
-#include "vec4d.h"
-#include "vec4i.h"
-#include "vec2dx4.h"
-#include "vec3dx4.h"
 
-#define ELEMWISE_FUN(FNNAME) \
+#define ELEMWISE_UNARY_FUN(FNNAME) \
+namespace aml { \
+    template <typename T> \
+    inline vec2<T> FNNAME(vec2<T> a) { \
+        return vec2<T>{aml::FNNAME(a.x), aml::FNNAME(a.y)}; \
+    } \
+    template <typename T> \
+    inline vec3<T> FNNAME(vec3<T> a) { \
+        return vec3<T>{aml::FNNAME(a.x), aml::FNNAME(a.y), aml::FNNAME(a.z)}; \
+    } \
+    template <typename T> \
+    inline vec4<T> FNNAME(vec4<T> a) { \
+        return vec4<T>{aml::FNNAME(a.x), aml::FNNAME(a.y), aml::FNNAME(a.z), aml::FNNAME(a.w)}; \
+    } \
+} \
+
+ELEMWISE_UNARY_FUN(sqrt)
+ELEMWISE_UNARY_FUN(floor)
+
+#undef ELEMWISE_UNARY_FUN
+
+#define ELEMWISE_BINARY_FUN(FNNAME) \
 namespace aml { \
     template <typename T> \
     inline vec2<T> FNNAME(vec2<T> a, vec2<T> b) { \
@@ -32,12 +47,10 @@ namespace aml { \
     } \
 } \
 
-ELEMWISE_FUN(max)
-ELEMWISE_FUN(min)
-ELEMWISE_FUN(sqrt)
-ELEMWISE_FUN(floor)
+ELEMWISE_BINARY_FUN(max)
+ELEMWISE_BINARY_FUN(min)
 
-#undef ELEMWISE_FUN
+#undef ELEMWISE_BINARY_FUN
 
 #define ELEMWISE_VEC_FUN(FNNAME) \
 namespace aml { \
@@ -105,37 +118,6 @@ ELEMWISE_VEC_CVT(toDouble, double)
 ELEMWISE_VEC_CVT(toInt, int)
 
 #undef ELEMWISE_VEC_CVT
-
-namespace aml {
-    template <>
-    inline vec4d toDouble(vec4i v) {
-        return vec4d::fromSimd(_mm256_cvtepi32_pd(v.simd));
-    }
-
-    template <>
-    inline vec4d toDouble(vec4f v) {
-        return vec4d::fromSimd(_mm256_cvtps_pd(v.simd));
-    }
-
-    template <>
-    inline vec4f toFloat(vec4d v) {
-        return vec4f::fromSimd(_mm256_cvtpd_ps(v.simd));
-    }
-
-    inline vec2i toInt(vec2d v) {
-        int x = _mm_cvtsi128_si32((__m128i) v.simd);
-        int y = _mm_extract_epi32(v.simd, 1);
-        return vec2i {x, y};
-    }
-
-    inline vec4i toInt(vec4f v) {
-        return vec4i::fromSimd(_mm_cvtps_epi32(v.simd));
-    }
-
-    inline vec4i toInt(vec4d v) {
-        return vec4i::fromSimd(_mm256_cvtpd_epi32(v.simd));
-    }
-}
 
 namespace aml {
     template<typename T>

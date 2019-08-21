@@ -5,11 +5,9 @@
 #include "doctest.h"
 #include <type_traits>
 
-#include "mat2f.h"
-#include "mat4f.h"
-#include "mat4d.h"
-#include "vec4f.h"
-#include "vec4d.h"
+#include "mat2.h"
+#include "mat4.h"
+#include "vec4.h"
 
 TEST_CASE("mat2f works") {
     SUBCASE("Is POD") {
@@ -66,7 +64,8 @@ TEST_CASE("mat4f works") {
                       -110.f, 82.f, 52.f, -36.f};
         ainv *= (-1.f / 376.f);
 
-        a = aml::inv(a);
+        mat4f ainv_result = mat4f::identity();
+        CHECK(aml::inv(a, a));
         for (int i = 0; i < 16; i++) {
             CHECK(a.p[i] == doctest::Approx(ainv.p[i]));
         }

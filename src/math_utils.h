@@ -9,7 +9,7 @@
 #define M_PI 3.14159265358979323846
 #endif
 
-#include "math.h"
+#include <cmath>
 
 namespace aml {
     template <typename T>
@@ -22,20 +22,23 @@ namespace aml {
         return (a < b)? a : b;
     }
 
-    template <typename T>
-    inline T sqrt(T x) {
+    inline float sqrt(float x) {
+        return ::sqrtf(x);
+    }
+
+    inline double sqrt(double x) {
         return ::sqrt(x);
     }
 
-    template <typename T>
-    inline T floor(T x) {
+    inline float floor(float x) {
+        return ::floorf(x);
+    }
+
+    inline double floor(double x) {
         return ::floor(x);
     }
 }
 
-#include "vec2.h"
-#include "vec3.h"
-#include "vec4.h"
 
 namespace aml {
 
@@ -68,16 +71,6 @@ T powi(T d, unsigned int i) {
         i--;
     }
     return res;
-}
-
-template <typename T>
-vec4<T> catmullRom(double a) {
-    vec4<T> coeffs;
-    coeffs.x = -0.5*a + a*a - 0.5*a*a*a;
-    coeffs.y = 1 - 2.5*a*a + 1.5*a*a*a;
-    coeffs.z = 0.5*a + 2*a*a - 1.5*a*a*a;
-    coeffs.w = -0.5*a*a + 0.5*a*a*a;
-    return coeffs;
 }
 
 template <typename T>

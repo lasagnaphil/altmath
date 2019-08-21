@@ -159,4 +159,8 @@ namespace aml {
 using mat2f = mat2<float>;
 using mat2d = mat2<double>;
 
+#ifdef ALTMATH_USE_SIMD
+#include "simd/mat2f.h"
+#endif
+
 #endif //COLDETECT_MAT2_H

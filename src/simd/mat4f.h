@@ -5,6 +5,8 @@
 #ifndef ALTMATH_MAT4F_H
 #define ALTMATH_MAT4F_H
 
+#ifdef ALTMATH_USE_SIMD
+
 // NOTE: because of trying to implement simple and fast multiplication,
 // the matrix only uses xmm registers (SSE).
 // Later I would try writing an AVX version.
@@ -30,6 +32,12 @@ struct mat4<float> {
         mat.simd[2] = simd2;
         mat.simd[3] = simd3;
         return mat;
+    }
+
+    static mat4<float> identity() {
+        mat4 m = {};
+        m.p[0] = m.p[5] = m.p[10] = m.p[15] = 1.0f;
+        return m;
     }
 
     inline float& operator[](int i) {
@@ -214,4 +222,5 @@ namespace aml {
     }
 }
 
+#endif
 #endif //ALTMATH_MAT4F_H

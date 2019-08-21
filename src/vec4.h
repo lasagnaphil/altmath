@@ -5,7 +5,7 @@
 #ifndef ALTMATH_VEC4_H
 #define ALTMATH_VEC4_H
 
-#include <math.h>
+#include <cmath>
 
 template <typename T>
 struct vec4 {
@@ -167,5 +167,10 @@ namespace aml {
         return v / norm(v);
     }
 }
+
+#ifdef ALTMATH_USE_SIMD
+#include "simd/vec4f.h"
+#include "simd/vec4d.h"
+#endif
 
 #endif //ALTMATH_VEC4_H

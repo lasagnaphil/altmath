@@ -5,6 +5,8 @@
 #ifndef ALTMATH_QUATF_H
 #define ALTMATH_QUATF_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "quat.h"
 #include "vec4f.h"
 
@@ -128,4 +130,5 @@ namespace aml {
 
 #undef _mm_pshufd
 
+#endif
 #endif //ALTMATH_QUATF_H

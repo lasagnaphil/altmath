@@ -5,7 +5,7 @@
 #ifndef ALTMATH_VEC3_H
 #define ALTMATH_VEC3_H
 
-#include <math.h>
+#include <cmath>
 
 template <typename T>
 struct vec3 {

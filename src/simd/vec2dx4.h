@@ -5,6 +5,8 @@
 #ifndef ALTMATH_VEC2DX4_H
 #define ALTMATH_VEC2DX4_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "vec2d.h"
 #include "vec4d.h"
 
@@ -77,4 +79,5 @@ inline vec2dx4& operator/=(vec2dx4& a, double k) {
     return a;
 }
 
+#endif
 #endif //ALTMATH_VEC2DX4_H

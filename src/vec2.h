@@ -148,4 +148,8 @@ namespace aml {
     }
 }
 
+#ifdef ALTMATH_USE_SIMD
+#include "simd/vec2d.h"
+#endif
+
 #endif //ALTMATH_VEC2_H

@@ -5,7 +5,7 @@
 #include <type_traits>
 #include "doctest.h"
 
-#include "quatf.h"
+#include "quat.h"
 #include "mat_utils.h"
 
 TEST_CASE("quatf works") {

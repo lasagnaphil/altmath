@@ -5,8 +5,11 @@
 #ifndef ALTMATH_VEC3DX4_H
 #define ALTMATH_VEC3DX4_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "vec3.h"
 #include "vec4d.h"
+
 
 using vec3dx4 = vec3<vec4d>;
 
@@ -85,4 +88,5 @@ inline vec3dx4& operator/=(vec3dx4& a, double k) {
     return a;
 }
 
+#endif
 #endif //ALTMATH_VEC3DX4_H

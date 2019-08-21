@@ -5,6 +5,8 @@
 #ifndef ALTMATH_VEC4I_H
 #define ALTMATH_VEC4I_H
 
+#ifdef ALTMATH_USE_SIMD
+
 #include "vec4.h"
 #include "math_utils.h"
 #include <immintrin.h>
@@ -167,4 +169,5 @@ namespace aml {
     }
 }
 
+#endif
 #endif //ALTMATH_VEC4I_H
